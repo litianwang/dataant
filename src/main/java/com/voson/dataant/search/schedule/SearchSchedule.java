@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
@@ -27,8 +30,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.voson.dataant.common.Task.hive.HiveTask;
+import com.voson.dataant.common.Task.tool.ShellTask;
 import com.voson.dataant.common.schedule.timer.BaseScheduleManager;
-import com.voson.dataant.common.util.Environment;
+import com.voson.dataant.common.util.EnvironmentFirstAnalyze;
 import com.voson.dataant.common.util.HiveQLlParserUtils;
 import com.voson.dataant.search.dao.SearchAppDao;
 import com.voson.dataant.search.dao.SearchUrlDao;
@@ -38,7 +42,7 @@ import com.voson.dataant.search.model.SearchUrl;
 /**
  * <code>{@link SearchSchedule}</code>
  *
- * TODO : document me
+ * 详单查询
  *
  * @author litianwang
  */
@@ -53,14 +57,19 @@ public class SearchSchedule extends BaseScheduleManager{
 	@Autowired
 	private SearchUrlDao searchUrlDao;
 	
-	/* (non-Javadoc)
-	 * @see com.voson.dataant.common.schedule.timer.IScheduleManager#init()
-	 */
+
+	
+	private ThreadPoolExecutor sqlldrImportPool = null;
+	
+	private final static int sqlldrMaxQueue = 20;
+	
 	@Override
 	@PostConstruct
 	public void init() {
-		workDir = Environment.getEnvConfigStirng("search.work.path");
-		resultDir = Environment.getEnvConfigStirng("search.result.path");
+		sqlldrImportPool = new ThreadPoolExecutor(4, 4, 2L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+		
+		workDir = EnvironmentFirstAnalyze.getEnvConfigStirng("search.work.path");
+		resultDir = EnvironmentFirstAnalyze.getEnvConfigStirng("search.result.path");
 		File file=new File(workDir);
 		if(!file.exists()){
 			file.mkdirs();
@@ -72,9 +81,6 @@ public class SearchSchedule extends BaseScheduleManager{
 	}	
 	
 
-	/* (non-Javadoc)
-	 * @see com.voson.dataant.common.schedule.timer.IScheduleManager#start()
-	 */
 	@Override
 	public void start() {
 		// 1、取得所有有效的url查询
@@ -122,11 +128,11 @@ public class SearchSchedule extends BaseScheduleManager{
 				try {
 					exitCode = hiveTask.run();
 				} catch (Exception e) {
-					// TODO: handle exception
 					e.printStackTrace();
 				}
 				if(0 == exitCode){
 					this.updateSearchUrlToFinish(searchUrl.getId(), "运行任务成功：");
+					this.doSqlldrImportAsynch(urlresultDir, config);
 				} else{
 					this.updateSearchUrlToFinish(searchUrl.getId(), "运行任务失败：");
 				}
@@ -170,17 +176,43 @@ public class SearchSchedule extends BaseScheduleManager{
 				try {
 					exitCode = hiveTask.run();
 				} catch (Exception e) {
-					// TODO: handle exception
 					e.printStackTrace();
 				}
 				if(0 == exitCode){
 					this.updateSearchAppToFinish(searchApp.getId(), "运行任务成功：");
+					this.doSqlldrImportAsynch(appResultDir, config);
 				} else{
 					this.updateSearchAppToFinish(searchApp.getId(), "运行任务失败：");
 				}
 			}
 			
 		}
+	}
+	
+	/**
+	 * 结果入oracle库【异步】<br/>
+	 * 采用异步线程进行处理，不等待sqlldr的处理结果<br/>
+	 * @param workPath
+	 * @param config
+	 */
+	private void doSqlldrImportAsynch(final String workPath,
+			final Map<String,String> urlConfig){
+		// 如果超过最大任务队列，则停止任务进入队列，
+		// 任务由以后的任务触发
+		if(sqlldrImportPool.getQueue().size() > sqlldrMaxQueue){
+			return;
+		}
+		sqlldrImportPool.execute(new Runnable() {
+			@Override
+			public void run() {
+				try{
+					ShellTask sqlldrImportTask = new ShellTask(urlConfig.get("result.import.shell"), workPath);
+					sqlldrImportTask.run();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 	
 	/**
@@ -242,7 +274,6 @@ public class SearchSchedule extends BaseScheduleManager{
 			try {
 				return parseXMLConfig(configF);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -256,7 +287,6 @@ public class SearchSchedule extends BaseScheduleManager{
 			try {
 				return parseXMLConfig(configF);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -269,6 +299,7 @@ public class SearchSchedule extends BaseScheduleManager{
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public static Map<String,String> parseXMLConfig(File xmlFile) throws Exception{
 		String configXML = FileUtils.readFileToString(xmlFile, "UTF-8");
 		Map<String,String> config = new HashMap<String, String>();
@@ -278,7 +309,6 @@ public class SearchSchedule extends BaseScheduleManager{
 		} catch (DocumentException e) {
 			throw new Exception(e);
 		}
-		;
 		for (Iterator ie = document.getRootElement().elementIterator(); ie.hasNext();) {
 	           Element element = (Element) ie.next();
 	           config.put(element.getName(), element.getText());

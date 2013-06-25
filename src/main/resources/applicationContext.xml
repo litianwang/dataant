@@ -13,7 +13,7 @@
 	default-lazy-init="true">
 
 	<description>Spring公共配置 </description>
-	<bean id="environment" class="com.voson.dataant.common.util.Environment">
+	<bean id="environment" class="com.voson.dataant.common.util.EnvironmentFirstAnalyze">
 	</bean>
 
 	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->

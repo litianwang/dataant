@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<!--处理目标表-->
-	<tablename>p_first_userurl</tablename>
-	<!--前置处理hive脚本-->
-	<pre><![CDATA[
-	]]></pre>
+	<!--分析结果入库的shell脚本-->
+	<result.import.shell>/home/hadoop/dgch/dataant/script/searchurl/import.SEARCH_URL_RS.sqlldr.sh</result.import.shell>
 	<!--核心处理hive脚本，生成查询结果-->
 	<core><![CDATA[
 select '#SEARCH_ID#' ,
@@ -53,7 +50,4 @@ and day = '#DAY#'
 {? and URL_CLASS_ID = '#URL_CLASS_ID#'}
 {? and URL_INTEREST_ID = '#URL_INTEREST_ID#'}
 	]]></core>
-	<!--后置处理hive脚本-->
-	<post><![CDATA[
-	]]></post>
 </config>

@@ -5,14 +5,10 @@
  */
 package com.voson.dataant.firstanalyze.schedule;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,7 +36,7 @@ import com.voson.dataant.common.Task.hive.HiveTask;
 import com.voson.dataant.common.Task.tool.HdfsDirCheckTask;
 import com.voson.dataant.common.Task.tool.ShellTask;
 import com.voson.dataant.common.schedule.timer.BaseScheduleManager;
-import com.voson.dataant.common.util.Environment;
+import com.voson.dataant.common.util.EnvironmentFirstAnalyze;
 import com.voson.dataant.firstanalyze.dao.FirstAnalyzeRuleDao;
 import com.voson.dataant.firstanalyze.dao.FirstAnalyzeRuleHistoryDao;
 import com.voson.dataant.firstanalyze.model.FirstAnalyzeRule;
@@ -98,7 +94,7 @@ public class FirstAnalyzeSchedule extends BaseScheduleManager{
 			return;
 		}
 		String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
-		String baseWorkPath = Environment.getFirstAnalyzePath() + File.separator + date ;
+		String baseWorkPath = EnvironmentFirstAnalyze.getFirstAnalyzePath() + File.separator + date ;
 		boolean isEmpty = checkExistData(baseWorkPath, urlConfig, appConfig);
 		if(isEmpty){
 			System.out.println("目录空！");
@@ -150,14 +146,14 @@ public class FirstAnalyzeSchedule extends BaseScheduleManager{
 			if(0 == exitCode){
 				this.updateRuleToFinish(currentTime.getTime(), rule.getId(), "运行任务成功：" + taskId);
 				history.setWorkDir(workPath);
-				history.setResultDir(Environment.getFirstAnalyzeResultPath());
+				history.setResultDir(EnvironmentFirstAnalyze.getFirstAnalyzeResultPath());
 				history.setEndTime(new Date());
 				history.setStatus("success");
 				this.updateRuleHistory(history);
 			} else{
 				this.updateRuleToFinish(currentTime.getTime(), rule.getId(), "运行任务失败：" + taskId);
 				history.setWorkDir(workPath);
-				history.setResultDir(Environment.getFirstAnalyzeResultPath());
+				history.setResultDir(EnvironmentFirstAnalyze.getFirstAnalyzeResultPath());
 				history.setEndTime(new Date());
 				history.setStatus("failed");
 				this.updateRuleHistory(history);
@@ -179,10 +175,6 @@ public class FirstAnalyzeSchedule extends BaseScheduleManager{
 		
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(System.currentTimeMillis());
-		System.out.println(System.nanoTime());
-	}
 	
 	/**
 	 * 一次分析结果入oracle库【异步】<br/>
@@ -429,7 +421,7 @@ public class FirstAnalyzeSchedule extends BaseScheduleManager{
 		core = StringUtils.replace(core, "#KEY_WORD#", RULE_KEYWORD);
 		core = StringUtils.replace(core, "#RULE_CODE#", rule.getRuleCode());
 		
-		HiveTask task = new HiveTask(core, taskId + "_url", workPath, Environment.getFirstAnalyzeResultPath());
+		HiveTask task = new HiveTask(core, taskId + "_url", workPath, EnvironmentFirstAnalyze.getFirstAnalyzeResultPath());
 		exitCode =  task.run();
 		history.setUrlNum(Math.min(task.getLineNum(),task.getMaxCnt()));
 		return exitCode;
@@ -464,7 +456,7 @@ public class FirstAnalyzeSchedule extends BaseScheduleManager{
 		core = core + " and " + condition;
 		core = StringUtils.replace(core, "#TASK_ID#", taskId);
 		core = StringUtils.replace(core, "#RULE_CODE#", rule.getRuleCode());
-		HiveTask task = new HiveTask(core, taskId + "_app", workPath, Environment.getFirstAnalyzeResultPath());
+		HiveTask task = new HiveTask(core, taskId + "_app", workPath, EnvironmentFirstAnalyze.getFirstAnalyzeResultPath());
 		exitCode =  task.run();
 		history.setAppNum(Math.min(task.getLineNum(),task.getMaxCnt()));
 		return exitCode;
@@ -612,126 +604,5 @@ public class FirstAnalyzeSchedule extends BaseScheduleManager{
 			return "" + seq;
 		}
 	}	
-	
-	public void test(String workDir, String cmd){
 
-		/**
-		 * 测试代码
-		 */
-		Process process;
-		ProcessBuilder builder = new ProcessBuilder(partitionCommandLine(cmd));
-		builder.directory(new File("/home/hadoop/dgch/dataant/work"));
-		try {
-			process=builder.start();
-		
-			final InputStream inputStream = process.getInputStream();
-			final InputStream errorStream = process.getErrorStream();
-			
-			String threadName= "test=";
-			
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try{
-						BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream));
-						String line;
-						while((line=reader.readLine())!=null){
-							System.out.println("std##" + line);
-						}
-					}catch(Exception e){
-						e.printStackTrace();
-					}
-				}
-			},threadName).start();
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						BufferedReader reader=new BufferedReader(new InputStreamReader(errorStream));
-						String line;
-						while((line=reader.readLine())!=null){
-							System.out.println("err##" + line);
-							
-						}
-					} catch (Exception e) {
-							e.printStackTrace();
-						}
-				}
-			},threadName).start();
-			int exitCode = -999;
-			try {
-				exitCode = process.waitFor();
-			} catch (InterruptedException e) {
-				// log(e);
-			} finally{
-				process=null;
-			}
-			if(exitCode!=0){
-				System.out.println("exitCode=" + exitCode);
-			}
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	}
-	
-	public static String[] partitionCommandLine(String command) {
-		
-		ArrayList<String> commands = new ArrayList<String>();
-		
-		String os=System.getProperties().getProperty("os.name");
-		if(os!=null && (os.startsWith("win") || os.startsWith("Win"))){
-			commands.add("CMD.EXE");
-			commands.add("/C");
-			commands.add(command);
-		}else{
-			int index = 0;
-
-	        StringBuffer buffer = new StringBuffer(command.length());
-
-	        boolean isApos = false;
-	        boolean isQuote = false;
-	        while(index < command.length()) {
-	            char c = command.charAt(index);
-
-	            switch(c) {
-	                case ' ':
-	                    if(!isQuote && !isApos) {
-	                        String arg = buffer.toString();
-	                        buffer = new StringBuffer(command.length() - index);
-	                        if(arg.length() > 0) {
-	                            commands.add(arg);
-	                        }
-	                    } else {
-	                        buffer.append(c);
-	                    }
-	                    break;
-	                case '\'':
-	                    if(!isQuote) {
-	                        isApos = !isApos;
-	                    } else {
-	                        buffer.append(c);
-	                    }
-	                    break;
-	                case '"':
-	                    if(!isApos) {
-	                        isQuote = !isQuote;
-	                    } else {
-	                        buffer.append(c);
-	                    }
-	                    break;
-	                default:
-	                    buffer.append(c);
-	            }
-
-	            index++;
-	        }
-
-	        if(buffer.length() > 0) {
-	            String arg = buffer.toString();
-	            commands.add(arg);
-	        }
-		}
-        return commands.toArray(new String[commands.size()]);
-	}
 }

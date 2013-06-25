@@ -1,0 +1,35 @@
+package com.voson.dataant.socket.master.reqresp;
+
+import java.util.ArrayList;
+
+import com.voson.dataant.socket.SocketLog;
+import com.voson.dataant.socket.master.MasterContext;
+import com.voson.dataant.socket.protocol.Protocol.Status;
+import com.voson.dataant.socket.protocol.Protocol.WebOperate;
+import com.voson.dataant.socket.protocol.Protocol.WebRequest;
+import com.voson.dataant.socket.protocol.Protocol.WebResponse;
+
+public class MasterBeWebDebug {
+	public WebResponse beWebExecute(MasterContext context,WebRequest req) {
+		// 判断job是否已经在运行中，或者在队列中
+		// 如果在，抛出异常，已经在执行中
+		// 如果不在，将该job放入等待队列
+		SocketLog.info("receive web debug request,rid="+req.getRid()+",debugId="+req.getId());
+		String debugId=req.getId();
+		for(String debug:new ArrayList<String>(context.getDebugQueue())){
+			if(debug.equals(debugId)){
+				WebResponse resp=WebResponse.newBuilder().setRid(req.getRid()).setOperate(WebOperate.ExecuteDebug)
+					.setStatus(Status.ERROR).setErrorText("已经在队列中，无法再次运行").build();
+				return resp;
+			}
+		}
+		
+		////DebugHistory debug=context.getDebugHistoryManager().findDebugHistory(debugId);
+		////context.getMaster().debug(debug);
+		
+		WebResponse resp=WebResponse.newBuilder().setRid(req.getRid()).setOperate(WebOperate.ExecuteDebug)
+			.setStatus(Status.OK).build();
+		SocketLog.info("send web debug response,rid="+req.getRid()+",debugId="+debugId);
+		return resp;
+	}
+}

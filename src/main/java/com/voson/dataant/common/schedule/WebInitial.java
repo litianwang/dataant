@@ -20,9 +20,14 @@ public class WebInitial extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public void init() throws ServletException {
-		
-		firstAnalyze();
-		search();
+		//window mac 系统直接返回成功
+		String os=System.getProperties().getProperty("os.name");
+		if(os!=null && (os.startsWith("win") || os.startsWith("Win") || os.startsWith("Mac"))){
+			//不进行调度，方便开发
+		} else {
+			search();
+			firstAnalyze();
+		}
 	}
 
 	/**

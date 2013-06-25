@@ -14,7 +14,5 @@
 	</div>
 	<h1>调度中心</h1>
 	<div class="submenu">
-		<a id="searchurl-tab" href="${ctx}/searchurl">URL详单查询</a>
-		<a id="searchapp-tab"href="${ctx}/searchapp">APP详单查询</a>
 	</div>
 </div>
