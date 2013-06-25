@@ -1,0 +1,2 @@
+*/5 * * * * /home/hadoop/dgch/dataant/script/import.FIRST_ANALYZE_APP_CDR.sqlldr.sh
+*/5 * * * * /home/hadoop/dgch/dataant/script/import.FIRST_ANALYZE_URL_CDR.sqlldr.sh

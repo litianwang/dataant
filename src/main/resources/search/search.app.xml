@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<!--处理目标表-->
+	<tablename>p_first_userflow</tablename>
+	<!--前置处理hive脚本-->
+	<pre><![CDATA[]]></pre>
+	<!--核心处理hive脚本，生成查询结果-->
+	<core><![CDATA[
+select '#SEARCH_ID#' , 
+T.UTC_BEGIN_TIME,
+T.UTC_END_TIME,
+T.USER_NO,
+T.IMEI_MEIDORESN,
+T.IMSI_MSID,
+T.NSAPI,
+T.APN_NAI,
+T.RAT_SERVICEOPTION,
+T.GGSN_PDSN_IP,
+T.SGSN_PCF_IP,
+T.LAC,
+T.CI,
+T.USER_IP,
+T.SERVER_IP,
+T.IP_PROTOCAL,
+T.USER_PORT,
+T.SERVER_PORT,
+T.APP_ID,
+T.MO_PKG_CNT,
+T.MT_PKG_CNT,
+T.MO_BYTE_CNT,
+T.MT_BYTE_CNT,
+T.END_TAG,
+T.HOST,
+T.URI,
+T.RESPONSE_CODE,
+T.RESPONSE_TIME,
+T.CONTENT_LENGTH,
+substr(T.UTC_BEGIN_TIME,0,8) 
+from p_first_userflow T 
+where year = '#YEAR#'
+and month = '#MONTH#'
+and day = '#DAY#' 
+{? and USER_NO = '#USER_NO#'}
+{? and APP_ID = '#APP_ID#'}
+	]]></core>
+	<!--后置处理hive脚本-->
+	<post><![CDATA[]]></post>
+</config>

@@ -1,0 +1,1 @@
+*/1 * * * * /home/hadoop/dgch/dataant/script/searchapp/import.SEARCH_APP_RS.sqlldr.sh

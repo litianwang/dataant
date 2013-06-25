@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<!-- 自动扫描且只扫描@Controller -->
+	<context:component-scan base-package="com.voson.dataant" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	
+	<!--
+		注意：当使用了<mvc:annotation-driven />的时候，它 会自动注册DefaultAnnotationHandlerMapping
+		与AnnotationMethodHandlerAdapter 两个bean。这时候第二种方式指定的全局属性编辑器就不会起作用了，
+		解决办法就是手动的添加上述bean，并把它们加在<mvc:annotation-driven/>的前面
+	-->
+	<!--
+		配置一个基于注解的定制的WebBindingInitializer，解决日期转换问题，方法级别的处理器映射，
+	-->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="cacheSeconds" value="0" />
+			<property name="webBindingInitializer">
+				<bean class="com.voson.dataant.common.web.MyWebBinding" />
+		</property>
+	</bean>
+	
+	<mvc:annotation-driven/>
+		
+	<!-- 将无法mapping到Controller的path交给default servlet handler处理 -->		
+	<mvc:default-servlet-handler/>
+	
+	<!-- 定义JSP文件的位置 --> 
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+	<!-- 定义无Controller的path<->view直接映射 -->
+	<mvc:view-controller path="/" view-name="redirect:/firstanalyze"/>
+	
+	
+</beans>

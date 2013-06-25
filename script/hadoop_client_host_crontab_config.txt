@@ -1,0 +1,2 @@
+*/20 * * * * /home/hadoop/dgch/dataant/script/userflow_put_to_hdfs.sh
+*/20 * * * * /home/hadoop/dgch/dataant/script/userurl_put_to_hdfs.sh

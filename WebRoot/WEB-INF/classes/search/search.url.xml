@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<!--处理目标表-->
+	<tablename>p_first_userurl</tablename>
+	<!--前置处理hive脚本-->
+	<pre><![CDATA[
+	]]></pre>
+	<!--核心处理hive脚本，生成查询结果-->
+	<core><![CDATA[
+select '#SEARCH_ID#' ,
+T.UTC_BEGIN_TIME,
+T.UTC_END_TIME,
+T.USER_NO,
+T.IMEI_MEIDORESN,
+T.IMSI_MSID,
+T.NSAPI,
+T.APN_NAI,
+T.RAT_SERVICEOPTION,
+T.GGSN_PDSN_IP,
+T.SGSN_PCF_IP,
+T.LAC,
+T.CI,
+T.USER_IP,
+T.SERVER_IP,
+T.IP_PROTOCAL,
+T.USER_PORT,
+T.SERVER_PORT,
+T.PROTOCAL_TYPE,
+T.CONTENT_TYPE,
+T.HOST_A,
+T.X_ONLINE_HOST,
+T.URI_C,
+T.REFERENCE,
+T.USERAGENT,
+T.SUCCESS_TAG,
+T.STATUS_CODE,
+T.CONTENT_LENGTH,
+T.RESPONSE_TIME,
+T.MO_PKG_CNT,
+T.MT_PKG_CNT,
+T.MO_BYTE_CNT,
+T.MT_BYTE_CNT,
+T.URL_CLASS_ID,
+T.URL_INTEREST_ID,
+substr(T.UTC_BEGIN_TIME,0,8) 
+from p_first_userurl T 
+where year = '#YEAR#'
+and month = '#MONTH#'
+and day = '#DAY#' 
+{? and USER_NO = '#USER_NO#'}
+{? and HOST_A like '%#HOST_A#%'}
+{? and URI_C like '%#URI_C#%'}
+{? and URL_CLASS_ID = '#URL_CLASS_ID#'}
+{? and URL_INTEREST_ID = '#URL_INTEREST_ID#'}
+	]]></core>
+	<!--后置处理hive脚本-->
+	<post><![CDATA[
+	]]></post>
+</config>
