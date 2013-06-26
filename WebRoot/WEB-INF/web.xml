@@ -3,10 +3,7 @@
   <display-name>dataant</display-name>
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>
-			classpath*:/applicationContext.xml,
-			classpath*:/applicationContext-shiro.xml
-		</param-value>
+    <param-value>classpath*:spring/*.xml</param-value>
   </context-param>
   <context-param>
     <param-name>spring.profiles.default</param-name>

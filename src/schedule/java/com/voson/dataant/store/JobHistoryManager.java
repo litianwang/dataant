@@ -17,8 +17,8 @@ public interface JobHistoryManager {
 	 * @param limit
 	 * @return
 	 */
-	public List<JobHistory> pagingList(final String jobId,final int start,final int limit);
-	public int pagingTotal(String jobId);
+	//public List<JobHistory> pagingList(final String jobId,final int start,final int limit);
+	//public int pagingTotal(String jobId);
 	
 	public void updateJobHistoryLog(String id,String log);
 	/**
@@ -31,7 +31,7 @@ public interface JobHistoryManager {
 	 * @param historyIdList
 	 * @return
 	 */
-	public Map<String,JobHistory> findLastHistoryByList(List<String> jobIds);
+	//public Map<String,JobHistory> findLastHistoryByList(List<String> jobIds);
 	/**
 	 * 获取最近24小时内，运行状态的所有记录
 	 * @return

@@ -21,17 +21,6 @@ echo Script $0 >> $LOG_FILE
 echo ==== started on `date` ==== >> $LOG_FILE
 echo >> $LOG_FILE
 
-#make lock file
-LOCK_FILE=${0}.lock
-if [ -f ${LOCK_FILE} ];then
-echo "locking!" >> $HDFS_PUT_LOG_FILE
-exit 0
-else
-echo `date` >> $LOCK_FILE
-chmod 666 $LOCK_FILE
-fi
-
-
 #==============configuration begin================#
 #HIVE_HOME=/home/hadoop/
 #扫描HDFS目录
@@ -39,7 +28,7 @@ SCAN_PATH=/user/hadoop/dgch/userflow/processed
 #扫描文件名前缀
 FILE_NAME_PREFIX="userflow_"
 #上传HDFS目录
-TABLE_NAME=p_first_userflow
+TABLE_NAME=userflow_cdr
 #分区表主目录
 TABLE_PATH=/user/hadoop/dgch/userflow
 
@@ -59,33 +48,31 @@ if [ "$A" = "" ]; then
         echo "no file" >> $LOG_FILE
 else
         hiveAddPartition=""
-	mvdata=""
+        mvdata=""
         for dir in ${A[*]}
                 do
                 #echo $dir
-		cmd1="echo \$dir|awk -F \"_\" '/${FILE_NAME_PREFIX}/{print \$1}'"
-		#echo "$cmd1"
-		uurl=`eval $cmd1`
-		cmd2="echo \$dir|awk -F \"_\" '/${FILE_NAME_PREFIX}/{print \$2 \$3}'"
-		#echo "$cmd2"
-		dayTime=`eval $cmd2`
+                cmd1="echo \$dir|awk -F \"_\" '/${FILE_NAME_PREFIX}/{print \$1}'"
+                #echo "$cmd1"
+                uurl=`eval $cmd1`
+                cmd2="echo \$dir|awk -F \"_\" '/${FILE_NAME_PREFIX}/{print \$2 \$3}'"
+                #echo "$cmd2"
+                dayTime=`eval $cmd2`
                 #uurl=`echo $dir|awk -F "_" '/userflow_/{print $1}'`
                 #dayTime=`echo $dir|awk -F "_" '/userflow_/{print $2 $3}'`
-		lth=`expr length "${dayTime}"`
-		#echo "length:${lth}"
+                lth=`expr length "${dayTime}"`
+                #echo "length:${lth}"
                 if [ "${lth}" = "10" ];then
                         year=${dayTime:0:4}
                         month=${dayTime:4:2}
                         day=${dayTime:6:2}
                         hour=${dayTime:8:2}
                         hiveAddPartition="${hiveAddPartition}alter table ${TABLE_NAME} add IF NOT EXISTS partition (year='${year}', month='${month}', day='${day}', hour='${hour}') location '${year}/${month}/${day}/${hour}';"
-			mvdata="${mvdata} dfs -mv ${uurl}_${year}${month}${day}_${hour}* ${TABLE_PATH}/${year}/${month}/${day}/${hour};"
+                        mvdata="${mvdata} dfs -mv ${uurl}_${year}${month}${day}_${hour}* ${TABLE_PATH}/${year}/${month}/${day}/${hour};"
                 fi
         done
         echo "hive -e \"${hiveAddPartition} ${mvdata}\"" >> $LOG_FILE
-	hive -e "${hiveAddPartition} ${mvdata}" >> $LOG_FILE  2>&1
+        hive -e "${hiveAddPartition} ${mvdata}" >> $LOG_FILE  2>&1
 fi
-#rm lock file
-rm -f $LOCK_FILE
 echo ==== end on `date` ==== >> $LOG_FILE
 echo  >> $LOG_FILE

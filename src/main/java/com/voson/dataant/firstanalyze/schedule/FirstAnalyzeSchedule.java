@@ -219,8 +219,10 @@ public class FirstAnalyzeSchedule extends BaseScheduleManager{
 		try{
 			ShellTask urlCheckTask = new ShellTask(urlConfig.get("partition.shell"), baseWorkPath);
 			ret = urlCheckTask.run();
+			System.out.println("url-to-partitions-exitcode=" + ret);
 			ShellTask appCheckTask = new ShellTask(appConfig.get("partition.shell"), baseWorkPath);
 			ret = appCheckTask.run();
+			System.out.println("app-to-partitions-exitcode=" + ret);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -285,7 +287,7 @@ public class FirstAnalyzeSchedule extends BaseScheduleManager{
 		int exitCode = -999;
 		try {
 			exitCode = urlMoveTask.run();
-			System.out.println("url-move-exitcode=" + exitCode);
+			System.out.println("url-pre-exitcode=" + exitCode);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -294,7 +296,7 @@ public class FirstAnalyzeSchedule extends BaseScheduleManager{
 		HiveTask appMoveTask = new HiveTask(appPre, preTaskId + "_app", workPath, null);
 		try {
 			exitCode = appMoveTask.run();
-			System.out.println("app-move-exitcode=" + exitCode);
+			System.out.println("app-pre-exitcode=" + exitCode);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -322,7 +324,7 @@ public class FirstAnalyzeSchedule extends BaseScheduleManager{
 		int exitCode = -999;
 		try {
 			exitCode = urlMoveTask.run();
-			System.out.println("url-move-exitcode=" + exitCode);
+			System.out.println("url-post-exitcode=" + exitCode);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -331,7 +333,7 @@ public class FirstAnalyzeSchedule extends BaseScheduleManager{
 		HiveTask appMoveTask = new HiveTask(appPost , postTaskId + "_app", workPath, null);
 		try {
 			exitCode = appMoveTask.run();
-			System.out.println("app-move-exitcode=" + exitCode);
+			System.out.println("app-post-exitcode=" + exitCode);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

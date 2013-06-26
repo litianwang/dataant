@@ -5,13 +5,22 @@
 #***************************************************************************
 #
 #
-SQLLDR_LOG_FILE=${0}.`date +%Y%m%d`.log
-echo >> $SQLLDR_LOG_FILE
-chmod 666 $SQLLDR_LOG_FILE
+script_dir=`dirname "$0"`
+script_dir=`cd "${script_dir}"; pwd`
+echo ${script_dir}
+script_name=`basename "$0"`
+#mkdir logs dir 
+if [ ! -d "${script_dir}/logs" ]; then
+mkdir ${script_dir}/logs
+fi
+LOG_FILE=${script_dir}/logs/${script_name}.`date +%Y%m%d`.log
+#LOG_FILE=${0}.`date +%Y%m%d`.log
+echo >> $LOG_FILE
+chmod 666 $LOG_FILE
 
-echo Script $0 >> $SQLLDR_LOG_FILE
-echo ==== started on `date` ==== >> $SQLLDR_LOG_FILE
-echo >> $SQLLDR_LOG_FILE
+echo Script $0 >> $LOG_FILE
+echo ==== started on `date` ==== >> $LOG_FILE
+echo >> $LOG_FILE
 
 ##Oracle
 source /home/hadoop/.bash_profile
@@ -24,10 +33,10 @@ FILE_NAME_RES="search_app*.txt"
 #
 SQLLDR_CTL_FILE=/home/hadoop/dgch/dataant/script/searchapp/SEARCH_APP_RS.ctl
 
-echo  "SCAN_PATH: $SCAN_PATH">> $SQLLDR_LOG_FILE
-echo  "FILE_NAME_RES: $FILE_NAME_RES">> $SQLLDR_LOG_FILE
-echo  "SQLLDR_CTL_FILE : $SQLLDR_CTL_FILE">> $SQLLDR_LOG_FILE
-echo  >> $SQLLDR_LOG_FILE
+echo  "SCAN_PATH: $SCAN_PATH">> $LOG_FILE
+echo  "FILE_NAME_RES: $FILE_NAME_RES">> $LOG_FILE
+echo  "SQLLDR_CTL_FILE : $SQLLDR_CTL_FILE">> $LOG_FILE
+echo  >> $LOG_FILE
 #=============configuration end ================#
 
 #
@@ -47,5 +56,5 @@ do
 	fi
  fi
 done
-echo ==== end on `date` ==== >> $SQLLDR_LOG_FILE
-echo  >> $SQLLDR_LOG_FILE
+echo ==== end on `date` ==== >> $LOG_FILE
+echo  >> $LOG_FILE

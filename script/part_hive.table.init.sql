@@ -1,8 +1,8 @@
 
 dfs -mkdir /user/hadoop/dgch/userurl;
 dfs -mkdir /user/hadoop/dgch/userflow;
-drop table p_first_userurl;
-CREATE EXTERNAL TABLE IF NOT EXISTS p_first_userurl(
+drop table userurl_cdr;
+CREATE EXTERNAL TABLE IF NOT EXISTS userurl_cdr(
 UTC_BEGIN_TIME String,
 UTC_END_TIME String,
 USER_NO String,
@@ -46,8 +46,8 @@ hour string
 )
 ROW FORMAT DELIMITED FIELDS TERMINATED BY "\t"
 LOCATION '/user/hadoop/dgch/userurl';
-drop table p_first_userflow;
-CREATE EXTERNAL TABLE IF NOT EXISTS p_first_userflow(
+drop table userflow_cdr;
+CREATE EXTERNAL TABLE IF NOT EXISTS userflow_cdr(
 UTC_BEGIN_TIME String,
 UTC_END_TIME String,
 USER_NO String,
