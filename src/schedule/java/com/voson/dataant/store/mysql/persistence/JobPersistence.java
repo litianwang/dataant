@@ -7,7 +7,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-@Entity(name="dataant_job")
+import javax.persistence.Table;
+@Entity
+@Table(name="dataant_job")
 public class JobPersistence implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id

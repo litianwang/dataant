@@ -41,17 +41,17 @@
 		<tbody>
 		<c:forEach items="${dataantGroups.content}" var="dataantGroup">
 			<tr>
-				<td><a href="${ctx}/dataantgroup/update/${dataantGroup.id}">${dataantGroup.id}</a></td>
-				<td><a href="${ctx}/dataantgroup/update/${dataantGroup.id}">${dataantGroup.configs}</a></td>
-				<td><a href="${ctx}/dataantgroup/update/${dataantGroup.id}">${dataantGroup.descr}</a></td>
-				<td><a href="${ctx}/dataantgroup/update/${dataantGroup.id}">${dataantGroup.directory}</a></td>
-				<td><a href="${ctx}/dataantgroup/update/${dataantGroup.id}">${dataantGroup.gmtCreate}</a></td>
-				<td><a href="${ctx}/dataantgroup/update/${dataantGroup.id}">${dataantGroup.gmtModified}</a></td>
-				<td><a href="${ctx}/dataantgroup/update/${dataantGroup.id}">${dataantGroup.name}</a></td>
-				<td><a href="${ctx}/dataantgroup/update/${dataantGroup.id}">${dataantGroup.owner}</a></td>
-				<td><a href="${ctx}/dataantgroup/update/${dataantGroup.id}">${dataantGroup.parent}</a></td>
-				<td><a href="${ctx}/dataantgroup/update/${dataantGroup.id}">${dataantGroup.resources}</a></td>
-				<td><a href="${ctx}/dataantgroup/delete/${dataantGroup.id}">删除</a></td>
+				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.id}</a></td>
+				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.configs}</a></td>
+				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.descr}</a></td>
+				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.directory}</a></td>
+				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.gmtCreate}</a></td>
+				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.gmtModified}</a></td>
+				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.name}</a></td>
+				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.owner}</a></td>
+				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.parent}</a></td>
+				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.resources}</a></td>
+				<td><a href="${ctx}/group/delete/${dataantGroup.id}">删除</a></td>
 			</tr>
 		</c:forEach>
 		</tbody>
@@ -59,6 +59,6 @@
 	
 	<tags:pagination page="${dataantGroups}" paginationSize="5"/>
 
-	<div><a class="btn" href="${ctx}/dataantgroup/create">创建**</a></div>
+	<div><a class="btn" href="${ctx}/group/create">创建**</a></div>
 </body>
 </html>

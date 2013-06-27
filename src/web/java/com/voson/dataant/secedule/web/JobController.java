@@ -27,7 +27,7 @@ import com.voson.dataant.secedule.service.JobService;
 import com.voson.dataant.store.mysql.persistence.JobPersistence;
 
 /**
- * DataantJob管理的Controller, 使用Restful风格的Urls:
+ * Job管理的Controller, 使用Restful风格的Urls:
  * 
  * List page     : GET /job/
  * Create page   : GET /job/create
@@ -65,61 +65,68 @@ public class JobController {
 			@RequestParam(value = "page", defaultValue = "1") int pageNumber, Model model, ServletRequest request) {
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 
-		Page<JobPersistence> dataantJobs = jobService.getDataantJob(searchParams, pageNumber, PAGE_SIZE, sortType);
+		Page<JobPersistence> jobs = jobService.getJob(searchParams, pageNumber, PAGE_SIZE, sortType);
 
-		model.addAttribute("dataantJobs", dataantJobs);
+		model.addAttribute("jobs", jobs);
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
 		// 将搜索条件编码成字符串，用于排序，分页的URL
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 
-		return "job/dataantjobList";
+		return "job/jobList";
 	}
 
 	@RequestMapping(value = "create", method = RequestMethod.GET)
 	public String createForm(Model model) {
-		model.addAttribute("dataantJob", new JobPersistence());
+		model.addAttribute("job", new JobPersistence());
 		model.addAttribute("action", "create");
-		return "job/dataantjobForm";
+		return "job/jobForm";
 	}
 
 	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid JobPersistence newDataantJob, RedirectAttributes redirectAttributes) {
-		// newDataantJob.setInsertTime(new Date());
-		jobService.saveDataantJob(newDataantJob);
+	public String create(@Valid JobPersistence newJob, RedirectAttributes redirectAttributes) {
+		// newJob.setInsertTime(new Date());
+		jobService.saveJob(newJob);
 		redirectAttributes.addFlashAttribute("message", "创建任务成功");
 		return "redirect:/job/";
 	}
 
 	@RequestMapping(value = "update/{id}", method = RequestMethod.GET)
 	public String updateForm(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("dataantJob", jobService.getDataantJob(id));
+		model.addAttribute("job", jobService.getJob(id));
 		model.addAttribute("action", "update");
-		return "job/dataantjobForm";
+		return "job/jobForm";
 	}
 
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String update(@Valid @ModelAttribute("preloadDataantJob") JobPersistence dataantJob, RedirectAttributes redirectAttributes) {
-		jobService.saveDataantJob(dataantJob);
+	public String update(@Valid @ModelAttribute("preloadJob") JobPersistence job, RedirectAttributes redirectAttributes) {
+		jobService.saveJob(job);
 		redirectAttributes.addFlashAttribute("message", "更新任务成功");
 		return "redirect:/job/";
 	}
 
 	@RequestMapping(value = "delete/{id}")
 	public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
-		jobService.deleteDataantJob(id);
+		jobService.deleteJob(id);
 		redirectAttributes.addFlashAttribute("message", "删除任务成功");
 		return "redirect:/job/";
 	}
+	
+	@RequestMapping(value = "run/{id}/{type}", method = RequestMethod.GET)
+	public String run(@PathVariable("id") String id, @PathVariable("type")int type) throws Exception {
+		jobService.runJob(id, type);
+		return "redirect:/job/";
+	}
+
 
 	/**
-	 * 使用@ModelAttribute, 实现Struts2 Preparable二次部分绑定的效果,先根据form的id从数据库查出DataantJob对象,再把Form提交的内容绑定到该对象上。
+	 * 使用@ModelAttribute, 实现Struts2 Preparable二次部分绑定的效果,先根据form的id从数据库查出Job对象,再把Form提交的内容绑定到该对象上。
 	 * 因为仅update()方法的form中有id属性，因此本方法在该方法中执行.
 	 */
-	@ModelAttribute("preloadDataantJob")
-	public JobPersistence getDataantJob(@RequestParam(value = "id", required = false) Long id) {
+	@ModelAttribute("preloadJob")
+	public JobPersistence getJob(@RequestParam(value = "id", required = false) Long id) {
 		if (id != null) {
-			return jobService.getDataantJob(id);
+			return jobService.getJob(id);
 		}
 		return null;
 	}

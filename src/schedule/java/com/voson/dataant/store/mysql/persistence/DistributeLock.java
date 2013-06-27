@@ -6,8 +6,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Entity(name="dataant_lock")
+@Entity
+@Table(name="dataant_lock")
 public class DistributeLock {
 	@Id
 	@GeneratedValue

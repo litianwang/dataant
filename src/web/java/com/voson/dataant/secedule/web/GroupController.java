@@ -27,7 +27,7 @@ import com.voson.dataant.secedule.service.GroupService;
 import com.voson.dataant.store.mysql.persistence.GroupPersistence;
 
 /**
- * DataantGroup管理的Controller, 使用Restful风格的Urls:
+ * Group管理的Controller, 使用Restful风格的Urls:
  * 
  * List page     : GET /group/
  * Create page   : GET /group/create
@@ -73,14 +73,14 @@ public class GroupController {
 		// 将搜索条件编码成字符串，用于排序，分页的URL
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 
-		return "group/dataantgroupList";
+		return "group/groupList";
 	}
 
 	@RequestMapping(value = "create", method = RequestMethod.GET)
 	public String createForm(Model model) {
 		model.addAttribute("dataantGroup", new GroupPersistence());
 		model.addAttribute("action", "create");
-		return "group/dataantgroupForm";
+		return "group/groupForm";
 	}
 
 	@RequestMapping(value = "create", method = RequestMethod.POST)
@@ -95,7 +95,7 @@ public class GroupController {
 	public String updateForm(@PathVariable("id") Integer id, Model model) {
 		model.addAttribute("dataantGroup", groupService.getDataantGroup(id));
 		model.addAttribute("action", "update");
-		return "group/dataantgroupForm";
+		return "group/groupForm";
 	}
 
 	@RequestMapping(value = "update", method = RequestMethod.POST)

@@ -49,36 +49,36 @@
 		</tr>
 		</thead>
 		<tbody>
-		<c:forEach items="${dataantJobs.content}" var="dataantJob">
+		<c:forEach items="${jobs.content}" var="job">
 			<tr>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.id}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.auto}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.configs}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.cronExpression}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.dependencies}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.descr}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.gmtCreate}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.gmtModified}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.groupId}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.historyId}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.name}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.owner}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.postProcessers}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.preProcessers}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.readyDependency}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.resources}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.runType}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.scheduleType}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.script}</a></td>
-				<td><a href="${ctx}/dataantjob/update/${dataantJob.id}">${dataantJob.status}</a></td>
-				<td><a href="${ctx}/dataantjob/delete/${dataantJob.id}">删除</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.id}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.auto}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.configs}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.cronExpression}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.dependencies}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.descr}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.gmtCreate}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.gmtModified}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.groupId}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.historyId}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.name}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.owner}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.postProcessers}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.preProcessers}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.readyDependency}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.resources}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.runType}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.scheduleType}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.script}</a></td>
+				<td><a href="${ctx}/job/update/${job.id}">${job.status}</a></td>
+				<td><a href="${ctx}/job/delete/${job.id}">删除</a></td>
 			</tr>
 		</c:forEach>
 		</tbody>
 	</table>
 	
-	<tags:pagination page="${dataantJobs}" paginationSize="5"/>
+	<tags:pagination page="${jobs}" paginationSize="5"/>
 
-	<div><a class="btn" href="${ctx}/dataantjob/create">创建**</a></div>
+	<div><a class="btn" href="${ctx}/job/create">创建**</a></div>
 </body>
 </html>

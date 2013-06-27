@@ -6,8 +6,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Entity(name="dataant_job_history")
+@Entity
+@Table(name="dataant_job_history")
 public class JobHistoryPersistence {
 	@Id
 	@GeneratedValue

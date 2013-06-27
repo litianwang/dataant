@@ -91,12 +91,17 @@ public class WorkerBeExecute {
 								jobHistory
 										.setStatus(com.voson.dataant.model.JobStatus.Status.FAILED);
 							}
-							context.getJobHistoryManager().updateJobHistory(
-									jobHistory);
-							history.getLog().appendZeus("exitCode=" + exitCode);
-							context.getJobHistoryManager().updateJobHistoryLog(
-									history.getId(),
-									history.getLog().getContent());
+							try {
+								
+								context.getJobHistoryManager().updateJobHistory(
+										jobHistory);
+								history.getLog().appendZeus("exitCode=" + exitCode);
+								context.getJobHistoryManager().updateJobHistoryLog(
+										history.getId(),
+										history.getLog().getContent());
+							} catch (Exception e2) {
+								e2.printStackTrace();
+							}
 							context.getManualRunnings().remove(historyId);
 						}
 

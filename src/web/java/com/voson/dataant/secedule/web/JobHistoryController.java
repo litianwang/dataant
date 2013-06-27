@@ -27,7 +27,7 @@ import com.voson.dataant.secedule.service.JobHistoryService;
 import com.voson.dataant.store.mysql.persistence.JobHistoryPersistence;
 
 /**
- * DataantJobHistory管理的Controller, 使用Restful风格的Urls:
+ * JobHistory管理的Controller, 使用Restful风格的Urls:
  * 
  * List page     : GET /jobhistory/
  * Create page   : GET /jobhistory/create
@@ -73,14 +73,14 @@ public class JobHistoryController {
 		// 将搜索条件编码成字符串，用于排序，分页的URL
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 
-		return "jobhistory/dataantjobhistoryList";
+		return "jobhistory/jobhistoryList";
 	}
 
 	@RequestMapping(value = "create", method = RequestMethod.GET)
 	public String createForm(Model model) {
 		model.addAttribute("dataantJobHistory", new JobHistoryPersistence());
 		model.addAttribute("action", "create");
-		return "jobhistory/dataantjobhistoryForm";
+		return "jobhistory/jobhistoryForm";
 	}
 
 	@RequestMapping(value = "create", method = RequestMethod.POST)
@@ -95,7 +95,7 @@ public class JobHistoryController {
 	public String updateForm(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("dataantJobHistory", jobHistoryService.getDataantJobHistory(id));
 		model.addAttribute("action", "update");
-		return "jobhistory/dataantjobhistoryForm";
+		return "jobhistory/jobhistoryForm";
 	}
 
 	@RequestMapping(value = "update", method = RequestMethod.POST)

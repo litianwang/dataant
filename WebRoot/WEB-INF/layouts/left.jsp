@@ -14,5 +14,6 @@
 	</div>
 	<h1>调度中心</h1>
 	<div class="submenu">
+		<a id="searchapp-tab"href="${ctx}/group">分组管理</a>
 	</div>
 </div>
