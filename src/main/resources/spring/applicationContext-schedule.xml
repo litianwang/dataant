@@ -14,13 +14,13 @@
 	
 	<bean id="environment" class="com.voson.dataant.util.Environment" >
 		<constructor-arg index="0">
-			<value>${zeus.env}</value>
+			<value>test</value>
 		</constructor-arg>
 		<constructor-arg index="1">
-			<value>${zeus.schedule.group}</value>
+			<value>test</value>
 		</constructor-arg>
 		<constructor-arg index="2">
-			<value>${zeus.localdata.dir}</value>
+			<value>/dataant/</value>
 		</constructor-arg>
 	</bean>
 	

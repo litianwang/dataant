@@ -2,7 +2,6 @@ package com.voson.dataant.schedule;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -11,17 +10,15 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import com.voson.dataant.schedule.mvc.ScheduleInfoLog;
 import com.voson.dataant.socket.worker.ClientWorker;
 import com.voson.dataant.store.mysql.persistence.DistributeLock;
+import com.voson.dataant.store.mysql.persistence.dao.DistributeLockDao;
 import com.voson.dataant.util.Environment;
 
 /**
@@ -30,9 +27,12 @@ import com.voson.dataant.util.Environment;
  * @author litianwang
  *
  */
-public class DistributeLocker extends HibernateDaoSupport{
+public class DistributeLocker {
 
 	private static Logger log=LogManager.getLogger(DistributeLocker.class);
+	
+	@Autowired
+	DistributeLockDao distributeLockDao;
 	
 	public static String host=UUID.randomUUID().toString();
 	@Autowired
@@ -83,30 +83,24 @@ public class DistributeLocker extends HibernateDaoSupport{
 	 *
 	 */
 	private void update(){
-		DistributeLock lock=(DistributeLock) getHibernateTemplate().execute(new HibernateCallback() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException,
-					SQLException {
-				Query query=session.createQuery("from com.voson.hornet.store.mysql.persistence.DistributeLock where subgroup=? order by id desc");
-				query.setParameter(0, Environment.getScheduleGroup());
-				query.setMaxResults(1);
-				DistributeLock lock= (DistributeLock) query.uniqueResult();
-				if(lock==null){
-					lock=new DistributeLock();
-					lock.setHost(host);
-					lock.setServerUpdate(new Date());
-					lock.setSubgroup(Environment.getScheduleGroup());
-					session.save(lock);
-					lock=(DistributeLock) query.uniqueResult();
-				}
-				return lock;
-			}
-		});
+		Page<DistributeLock>  locks = distributeLockDao.findBySubgroupOrderByIdDesc(Environment.getScheduleGroup(), new PageRequest(0, 1));
+		DistributeLock lock = null;
+		if(null != locks && locks.iterator().hasNext()){
+			lock = locks.iterator().next();
+		}
+		if(lock==null){
+			lock=new DistributeLock();
+			lock.setHost(host);
+			lock.setServerUpdate(new Date());
+			lock.setSubgroup(Environment.getScheduleGroup());
+			lock = distributeLockDao.save(lock);
+		}
+		
 		
 		if(host.equals(lock.getHost())){
 			log.error("hold the locker and update time");
 			lock.setServerUpdate(new Date());
-			getHibernateTemplate().update(lock);
+			distributeLockDao.save(lock);
 			
 			zeusSchedule.startup(port);
 		}else{//其他服务器抢占了锁
@@ -117,7 +111,7 @@ public class DistributeLocker extends HibernateDaoSupport{
 				lock.setHost(host);
 				lock.setServerUpdate(new Date());
 				lock.setSubgroup(Environment.getScheduleGroup());
-				getHibernateTemplate().update(lock);
+				distributeLockDao.save(lock);
 				zeusSchedule.startup(port);
 			}else{//如果Master服务器没有问题，本服务器停止server角色
 				zeusSchedule.shutdown();

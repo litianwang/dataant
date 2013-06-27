@@ -1,23 +1,17 @@
 package com.voson.dataant.store.mysql;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.orm.hibernate3.HibernateCallback;
 
 import com.voson.dataant.model.GroupDescriptor;
 import com.voson.dataant.model.JobDescriptor;
@@ -40,9 +34,9 @@ public class MysqlGroupManager implements GroupManager{
 	
 
 	@Autowired
-	GroupPersistenceDao groupDao; 
+	GroupPersistenceDao groupPersistenceDao; 
 	@Autowired
-	JobPersistenceDao jobDao;
+	JobPersistenceDao JobPersistenceDao;
 	
 	@Override
 	public void deleteGroup(String user, String groupId) throws ZeusException {
@@ -57,7 +51,7 @@ public class MysqlGroupManager implements GroupManager{
 				throw new ZeusException("该组下不为空，无法删除");
 			}
 		}
-		groupDao.delete(Long.valueOf(groupId));
+		groupPersistenceDao.delete(Integer.valueOf(groupId));
 		//getHibernateTemplate().delete(getHibernateTemplate().get(GroupPersistence.class, Integer.valueOf(groupId)));
 	}
 
@@ -72,7 +66,7 @@ public class MysqlGroupManager implements GroupManager{
 			}
 			throw new ZeusException("该Job正在被其他Job"+deps.toString()+"依赖，无法删除");
 		}
-		jobDao.delete(Long.valueOf(jobId));
+		JobPersistenceDao.delete(Long.valueOf(jobId));
 		//getHibernateTemplate().delete(getHibernateTemplate().get(JobPersistence.class, Long.valueOf(jobId)));
 	}
 
@@ -118,7 +112,7 @@ public class MysqlGroupManager implements GroupManager{
 	@Override
 	public List<Tuple<JobDescriptor, JobStatus>> getChildrenJob(String groupId){
 		// List<JobPersistence> list=getHibernateTemplate().find("from com.voson.hornet.store.mysql.persistence.JobPersistence where groupId="+groupId);
-		List<JobPersistence> list = jobDao.findByGroupId(Long.valueOf(groupId));
+		List<JobPersistence> list = JobPersistenceDao.findByGroupId(Long.valueOf(groupId));
 		List<Tuple<JobDescriptor, JobStatus>> result=new ArrayList<Tuple<JobDescriptor, JobStatus>>();
 		if(list!=null){
 			for(JobPersistence j:list){
@@ -134,7 +128,7 @@ public class MysqlGroupManager implements GroupManager{
 	 */
 	@Override
 	public List<GroupDescriptor> getChildrenGroup(String groupId){
-		List<GroupPersistence> list = groupDao.findByParent(Long.valueOf(groupId));
+		List<GroupPersistence> list = groupPersistenceDao.findByParent(Integer.valueOf(groupId));
 		// List<GroupPersistence> list=getHibernateTemplate().find("from com.voson.hornet.store.mysql.persistence.GroupPersistence where parent="+groupId);
 		List<GroupDescriptor> result=new ArrayList<GroupDescriptor>();
 		if(list!=null){
@@ -147,7 +141,7 @@ public class MysqlGroupManager implements GroupManager{
 
 	@Override
 	public GroupDescriptor getGroupDescriptor(String groupId) {
-		GroupPersistence persist = groupDao.findOne(Long.valueOf(groupId));
+		GroupPersistence persist = groupPersistenceDao.findOne(Integer.valueOf(groupId));
 		// GroupPersistence persist=(GroupPersistence)getHibernateTemplate().get(GroupPersistence.class, Integer.valueOf(groupId));
 		if(persist!=null){
 			return PersistenceAndBeanConvert.convert(persist);
@@ -165,7 +159,7 @@ public class MysqlGroupManager implements GroupManager{
 	}
 	
 	private JobPersistence getJobPersistence(String jobId){
-		JobPersistence persist = jobDao.findOne(Long.valueOf(jobId));
+		JobPersistence persist = JobPersistenceDao.findOne(Long.valueOf(jobId));
 		//JobPersistence persist=(JobPersistence) getHibernateTemplate().get(JobPersistence.class, Long.valueOf(jobId));
 		if(persist==null){
 			return null;
@@ -175,13 +169,13 @@ public class MysqlGroupManager implements GroupManager{
 	
 	@Override
 	public String getRootGroupId() {
-		Page<GroupPersistence> list = groupDao.findAll(new PageRequest(0, 1, new Sort(Direction.ASC, "id")));
+		Page<GroupPersistence> list = groupPersistenceDao.findAll(new PageRequest(0, 1, new Sort(Direction.ASC, "id")));
 		if(list==null || list.getNumberOfElements()==0){
 			GroupPersistence persist=new GroupPersistence();
 			persist.setName("众神之神");
-			////persist.setOwner(ZeusUser.ADMIN.getUid());
+			persist.setOwner("litianwang");
 			persist.setDirectory(0);
-			groupDao.save(persist);
+			groupPersistenceDao.save(persist);
 			if(persist.getId()==null){
 				return null;
 			}
@@ -225,12 +219,12 @@ public class MysqlGroupManager implements GroupManager{
 	@Override
 	public void updateGroup(String user,GroupDescriptor group) throws ZeusException{
 		// GroupPersistence old=(GroupPersistence) getHibernateTemplate().get(GroupPersistence.class, Integer.valueOf(group.getId()));
-		GroupPersistence old= groupDao.findOne(Long.valueOf(group.getId()));
+		GroupPersistence old= groupPersistenceDao.findOne(Integer.valueOf(group.getId()));
 		updateGroup(user, group, old.getOwner(),old.getParent()==null?null:old.getParent().toString());
 	}
 	
 	public void updateGroup(String user,GroupDescriptor group,String owner,String parent) throws ZeusException{
-		GroupPersistence old= groupDao.findOne(Long.valueOf(group.getId()));
+		GroupPersistence old= groupPersistenceDao.findOne(Integer.valueOf(group.getId()));
 		//GroupPersistence old=(GroupPersistence) getHibernateTemplate().get(GroupPersistence.class, Integer.valueOf(group.getId()));
 		
 		GroupPersistence persist=PersistenceAndBeanConvert.convert(group);
@@ -247,19 +241,19 @@ public class MysqlGroupManager implements GroupManager{
 		persist.setGmtModified(new Date());
 		
 		// getHibernateTemplate().update(persist);
-		groupDao.save(persist);
+		groupPersistenceDao.save(persist);
 	}
 	
 
 	@Override
 	public void updateJob(String user,JobDescriptor job) throws ZeusException {
-		JobPersistence orgPersist = jobDao.findOne(Long.valueOf(job.getId()));
+		JobPersistence orgPersist = JobPersistenceDao.findOne(Long.valueOf(job.getId()));
 		// JobPersistence orgPersist=(JobPersistence) getHibernateTemplate().get(JobPersistence.class, Long.valueOf(job.getId()));
 		updateJob(user, job, orgPersist.getOwner(),orgPersist.getGroupId().toString());
 	}
 	
 	public void updateJob(String user,JobDescriptor job,String owner,String groupId) throws ZeusException {
-		JobPersistence orgPersist = jobDao.findOne(Long.valueOf(job.getId()));
+		JobPersistence orgPersist = JobPersistenceDao.findOne(Long.valueOf(job.getId()));
 		//JobPersistence orgPersist=(JobPersistence) getHibernateTemplate().get(JobPersistence.class, Long.valueOf(job.getId()));
 		if(job.getScheduleType()==JobScheduleType.Independent){
 			job.setDependencies(new ArrayList<String>());
@@ -278,7 +272,7 @@ public class MysqlGroupManager implements GroupManager{
 		
 //		if(jobValidate.valide(job)){
 			// getHibernateTemplate().update(persist);
-			jobDao.save(persist);
+			JobPersistenceDao.save(persist);
 //		}
 	}
 	////@Autowired
@@ -306,7 +300,7 @@ public class MysqlGroupManager implements GroupManager{
 		persist.setGmtModified(new Date());
 		
 		// getHibernateTemplate().save(persist);
-		groupDao.save(persist);
+		groupPersistenceDao.save(persist);
 		return PersistenceAndBeanConvert.convert(persist);
 	}
 
@@ -327,44 +321,31 @@ public class MysqlGroupManager implements GroupManager{
 		persist.setGmtCreate(new Date());
 		persist.setGmtModified(new Date());
 		//getHibernateTemplate().save(persist);
-		jobDao.save(persist);
+		JobPersistenceDao.save(persist);
 		return PersistenceAndBeanConvert.convert(persist).getX();
 	}
 
 	
-//	@Override
-//	public Map<String, Tuple<JobDescriptor, JobStatus>> getJobDescriptor(final Collection<String> jobIds) {
-//		List<Tuple<JobDescriptor, JobStatus>> list=(List<Tuple<JobDescriptor, JobStatus>>) getHibernateTemplate().execute(new HibernateCallback() {
-//			
-//			@Override
-//			public Object doInHibernate(Session session) throws HibernateException,
-//					SQLException {
-//				if(jobIds.isEmpty()){
-//					return Collections.emptyList();
-//				}
-//				List<Long> ids=new ArrayList<Long>();
-//				for(String i:jobIds){
-//					ids.add(Long.valueOf(i));
-//				}
-//				Query query=session.createQuery("from com.voson.hornet.store.mysql.persistence.JobPersistence where id in (:list)");
-//				query.setParameterList("list", ids);
-//				List<JobPersistence> list= query.list();
-//				List<Tuple<JobDescriptor, JobStatus>> result=new ArrayList<Tuple<JobDescriptor, JobStatus>>();
-//				if(list!=null && !list.isEmpty()){
-//					for(JobPersistence persist:list){
-//						result.add(PersistenceAndBeanConvert.convert(persist));
-//					}
-//				}
-//				return result;
-//			}
-//		});
-//		
-//		Map<String, Tuple<JobDescriptor, JobStatus>> map=new HashMap<String, Tuple<JobDescriptor, JobStatus>>();
-//		for(Tuple<JobDescriptor, JobStatus> jd:list){
-//			map.put(jd.getX().getId(), jd);
-//		}
-//		return map;
-//	}
+	@Override
+	public Map<String, Tuple<JobDescriptor, JobStatus>> getJobDescriptor(final Collection<String> jobIds) {
+		List<Long> ids=new ArrayList<Long>();
+		for(String i:jobIds){
+			ids.add(Long.valueOf(i));
+		}
+		List<JobPersistence> list= JobPersistenceDao.findByIdIn(ids);
+		List<Tuple<JobDescriptor, JobStatus>> result =new ArrayList<Tuple<JobDescriptor, JobStatus>>();
+		if(list!=null && !list.isEmpty()){
+			for(JobPersistence persist:list){
+				result.add(PersistenceAndBeanConvert.convert(persist));
+			}
+		}
+		
+		Map<String, Tuple<JobDescriptor, JobStatus>> map=new HashMap<String, Tuple<JobDescriptor, JobStatus>>();
+		for(Tuple<JobDescriptor, JobStatus> jd:result){
+			map.put(jd.getX().getId(), jd);
+		}
+		return map;
+	}
 
 	@Override
 	public void updateJobStatus(JobStatus jobStatus) {
@@ -378,7 +359,7 @@ public class MysqlGroupManager implements GroupManager{
 		persistence.setHistoryId(temp.getHistoryId());
 		
 		// getHibernateTemplate().update(persistence);
-		jobDao.save(persistence);
+		JobPersistenceDao.save(persistence);
 	}
 
 	@Override

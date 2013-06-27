@@ -1,6 +1,6 @@
 package com.voson.dataant.store.mysql.persistence.dao;
 
-import java.util.Date;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -12,8 +12,10 @@ public interface JobPersistenceDao  extends PagingAndSortingRepository<JobPersis
 	/**
 	 * @return
 	 */
-	@Query(value="from com.voson.hornet.store.mysql.persistence.JobPersistence where groupId=?1") 
-	 public List<JobPersistence> findByGroupId(Long groupId); 
+	public List<JobPersistence> findByGroupId(Long groupId); 
+	
+
+	public List<JobPersistence> findByIdIn(Collection<Long> IdList); 
 	
 	
 }

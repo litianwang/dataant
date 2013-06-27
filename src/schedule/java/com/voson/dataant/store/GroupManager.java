@@ -82,7 +82,7 @@ public interface GroupManager {
 	 * @param jobIds
 	 * @return
 	 */
-	//Map<String, Tuple<JobDescriptor, JobStatus>> getJobDescriptor(Collection<String> jobIds);
+	Map<String, Tuple<JobDescriptor, JobStatus>> getJobDescriptor(Collection<String> jobIds);
 	/**
 	 * 创建一个group
 	 * @param user
