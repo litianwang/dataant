@@ -93,15 +93,13 @@ public class WorkerHandler extends SimpleChannelUpstreamHandler{
 		SocketLog.info("worker disconnect to master");
 		//断开连接，如果还有运行中的job，将这些job取消掉
 		for(String jobId:new HashSet<String>(context.getRunnings().keySet())){
-			context.getRunnings().get(jobId).getJobContext().getJobHistory().getLog().appendZeus("worker与master断开连接，worker主动取消该任务");
+			context.getRunnings().get(jobId).getJobContext().getJobHistory().getLog().appendDataant("worker与master断开连接，worker主动取消该任务");
 			context.getClientWorker().cancelScheduleJob(jobId);
 		}
-//		for(String debugId:new HashSet<String>(context.getDebugRunnings().keySet())){
-//			context.getDebugRunnings().get(debugId).getJobContext().getJobHistory().getLog().appendZeus("worker与master断开连接，worker主动取消该任务");
-//			context.getClientWorker().cancelDebugJob(debugId);
-//		}
+
+
 		for(String historyId:new HashSet<String>(context.getManualRunnings().keySet())){
-			context.getManualRunnings().get(historyId).getJobContext().getJobHistory().getLog().appendZeus("worker与master断开连接，worker主动取消该任务");
+			context.getManualRunnings().get(historyId).getJobContext().getJobHistory().getLog().appendDataant("worker与master断开连接，worker主动取消该任务");
 			context.getClientWorker().cancelManualJob(historyId);
 		}
 		this.context.setServerChannel(null);

@@ -36,26 +36,17 @@ public abstract class AbstractJob implements Job {
 		if(jobContext.getJobHistory()!=null){
 			jobContext.getJobHistory().getLog().appendConsole(log);
 		}
-//		if(jobContext.getDebugHistory()!=null){
-//			jobContext.getDebugHistory().getLog().appendConsole(log);
-//		}
 	}
 	
 	protected void log(String log){
 		if(jobContext.getJobHistory()!=null){
-			jobContext.getJobHistory().getLog().appendZeus(log);
+			jobContext.getJobHistory().getLog().appendDataant(log);
 		}
-//		if(jobContext.getDebugHistory()!=null){
-//			jobContext.getDebugHistory().getLog().appendZeus(log);
-//		}
 	}
 	protected void log(Exception e){
 		if(jobContext.getJobHistory()!=null){
-			jobContext.getJobHistory().getLog().appendZeusException(e);
+			jobContext.getJobHistory().getLog().appendDataantException(e);
 		}
-//		if(jobContext.getDebugHistory()!=null){
-//			jobContext.getDebugHistory().getLog().appendZeusException(e);
-//		}
 	}
 	
 }

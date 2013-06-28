@@ -7,7 +7,7 @@ import java.io.File;
  * 环境类
  * 用于判断当前是哪个环境
  * 在spring中进行设置
- * @author zhoufang
+ * @author litianwang
  *
  */
 public class Environment {

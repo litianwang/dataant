@@ -42,7 +42,7 @@ public class JobStatus implements Serializable{
 	 * 	Job运行成功(瞬间状态)
 	 * FAILED
 	 * 	Job运行失败(瞬间状态)
-	 * @author zhoufang
+	 * @author litianwang
 	 *
 	 */
 	public enum Status{
@@ -74,7 +74,7 @@ public class JobStatus implements Serializable{
 	 * 1： 定时执行
 	 * 2：手动执行(不产生连锁反应)
 	 * 3：手动恢复(产生连锁反应)
-	 * @author zhoufang
+	 * @author litianwang
 	 *
 	 */
 	public enum TriggerType{

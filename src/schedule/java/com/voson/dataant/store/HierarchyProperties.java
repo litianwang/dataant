@@ -10,7 +10,7 @@ import java.util.Set;
 
 /**
  * 带层次结构的属性
- * @author zhoufang
+ * @author litianwang
  *
  */
 public class HierarchyProperties {

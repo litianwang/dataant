@@ -15,7 +15,7 @@ import com.voson.dataant.job.ProcessJob;
 import com.voson.dataant.util.PropertyKeys;
 /**
  * 采用Shell脚本的任务
- * @author zhoufang
+ * @author litianwang
  *
  */
 public class ShellJob extends ProcessJob{
@@ -50,11 +50,11 @@ public class ShellJob extends ProcessJob{
 			if(!f.exists()){
 				f.createNewFile();
 			}
-			writer=new OutputStreamWriter(new FileOutputStream(f),Charset.forName(jobContext.getProperties().getProperty("zeus.fs.encode", "utf-8")));
+			writer=new OutputStreamWriter(new FileOutputStream(f),Charset.forName(jobContext.getProperties().getProperty("dataant.fs.encode", "utf-8")));
 			writer.write(script);
 			getProperties().setProperty(PropertyKeys.RUN_SHELLPATH, f.getAbsolutePath());
 		} catch (Exception e) {
-			jobContext.getJobHistory().getLog().appendZeusException(e);
+			jobContext.getJobHistory().getLog().appendDataantException(e);
 		} finally{
 			IOUtils.closeQuietly(writer);
 		}

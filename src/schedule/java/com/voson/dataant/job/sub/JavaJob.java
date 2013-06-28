@@ -17,7 +17,7 @@ import static com.voson.dataant.util.RunningJobKeys.RUN_MAX_MEMORY_SIZE;
 
 /**
  * 代表一个执行java命令行的Job
- * @author zhoufang
+ * @author litianwang
  *
  */
 public class JavaJob extends ProcessJob{

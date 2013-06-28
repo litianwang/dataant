@@ -3,10 +3,10 @@ package com.voson.dataant.schedule.mvc.event;
 import com.voson.dataant.model.JobHistory;
 import com.voson.dataant.model.JobStatus.TriggerType;
 import com.voson.dataant.mvc.AppEvent;
-import com.voson.dataant.schedule.mvc.ZeusJobException;
+import com.voson.dataant.schedule.mvc.DataantJobException;
 /**
  * Job失败触发的事件
- * @author zhoufang
+ * @author litianwang
  *
  */
 public class JobFailedEvent extends AppEvent{
@@ -14,13 +14,13 @@ public class JobFailedEvent extends AppEvent{
 	private final JobHistory history;
 	private final String jobId;
 	private TriggerType triggerType;
-	private final ZeusJobException jobException;
+	private final DataantJobException jobException;
 	
 	public JobFailedEvent(String jobId,TriggerType triggerType) {
 		this(jobId,triggerType,null,null);
 	}
 	
-	public JobFailedEvent(String jobId,TriggerType triggerType,JobHistory history,ZeusJobException t){
+	public JobFailedEvent(String jobId,TriggerType triggerType,JobHistory history,DataantJobException t){
 		super(Events.JobFailed);
 		this.jobId=jobId;
 		this.triggerType=triggerType;
@@ -41,7 +41,7 @@ public class JobFailedEvent extends AppEvent{
 		return history;
 	}
 
-	public ZeusJobException getJobException() {
+	public DataantJobException getJobException() {
 		return jobException;
 	}
 

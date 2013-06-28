@@ -77,30 +77,4 @@ public class WorkerBeCancel {
 			}
 		});
 	}
-//	public Future<Response> cancelDebug(final WorkerContext context,final Request req,final String debugId){
-//		Future<Response> future=null;
-//		SocketLog.info("receive master cancel debug request,rid="+req.getRid()+",debugId="+debugId);
-//		if(!context.getDebugRunnings().containsKey(debugId)){
-//			future= context.getThreadPool().submit(new Callable<Response>() {
-//				public Response call() throws Exception {
-//					return Response.newBuilder().setRid(req.getRid()).setOperate(Operate.Cancel).setStatus(Status.ERROR)
-//					.setErrorText("运行任务中查无此任务").build();
-//				}
-//			});
-//			DebugHistory history=context.getDebugHistoryManager().findDebugHistory(debugId);
-//			history.setStatus(com.taobao.zeus.model.JobStatus.Status.FAILED);
-//			history.setEndTime(new Date());
-//			context.getDebugHistoryManager().updateDebugHistory(history);
-//		}else{
-//			SocketLog.info("send cancel debug response to worker,rid="+req.getRid()+",debugId="+debugId);
-//			future= context.getThreadPool().submit(new Callable<Response>() {
-//				public Response call() throws Exception {
-//					context.getClientWorker().cancelDebugJob(debugId);
-//					Response resp=Response.newBuilder().setRid(req.getRid()).setOperate(Operate.Cancel).setStatus(Status.OK).build();
-//					return resp;
-//				}
-//			});
-//		}
-//		return future;
-//	}
 }

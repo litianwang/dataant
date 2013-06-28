@@ -20,7 +20,7 @@ import com.voson.dataant.job.sub.tool.CancelHadoopJob;
 import com.voson.dataant.store.HierarchyProperties;
 /**
  * 通过操作系统创建进程Process的Job任务
- * @author zhoufang
+ * @author litianwang
  *
  */
 public abstract class ProcessJob extends AbstractJob implements Job {

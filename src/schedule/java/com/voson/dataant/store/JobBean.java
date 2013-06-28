@@ -11,7 +11,7 @@ import com.voson.dataant.model.JobStatus;
 
 /**
  * 内存处理模型，包含数结构,以及不同对象之间的引用关系
- * @author zhoufang
+ * @author litianwang
  */
 public class JobBean{
 	private final JobDescriptor jobDescriptor;

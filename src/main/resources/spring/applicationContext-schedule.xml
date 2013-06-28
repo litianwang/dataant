@@ -27,7 +27,7 @@
 	<bean id="clientWorker" class="com.voson.dataant.socket.worker.ClientWorker" >
 	</bean>
 
-	<!-- gwt bean
+	<!--  bean
 	
 	<bean id="scheduleGroupManager" class="com.voson.dataant.web.ScheduleGroupManager" >
 		<property name="groupManager" ref="groupManager"></property>

@@ -13,7 +13,7 @@
 //import com.voson.dataant.socket.master.MasterContext;
 ///**
 // * 如果是新增操作，这里进行处理，添加controller
-// * @author zhoufang
+// * @author litianwang
 // *
 // */
 //public class AddJobListener extends DispatcherListener{

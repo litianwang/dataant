@@ -5,7 +5,13 @@
 
 <html>
 <head>
-	<title>**管理</title>
+	<title>分组管理</title>
+	
+	<script>
+		$(document).ready(function() {
+			$("#sch-group-tab").addClass("active");
+		});
+	</script>
 </head>
 
 <body>
@@ -26,15 +32,12 @@
 		<thead>
 		<tr>
 			<th>ID</th>
-			<th>配置项</th>
-			<th>描述</th>
 			<th>目录</th>
 			<th>创建时间</th>
 			<th>修改时间</th>
 			<th>名称</th>
 			<th>管理员</th>
 			<th>父组</th>
-			<th>资源项</th>
 		<th>管理</th>
 		</tr>
 		</thead>
@@ -42,15 +45,12 @@
 		<c:forEach items="${dataantGroups.content}" var="dataantGroup">
 			<tr>
 				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.id}</a></td>
-				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.configs}</a></td>
-				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.descr}</a></td>
 				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.directory}</a></td>
 				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.gmtCreate}</a></td>
 				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.gmtModified}</a></td>
 				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.name}</a></td>
 				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.owner}</a></td>
 				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.parent}</a></td>
-				<td><a href="${ctx}/group/update/${dataantGroup.id}">${dataantGroup.resources}</a></td>
 				<td><a href="${ctx}/group/delete/${dataantGroup.id}">删除</a></td>
 			</tr>
 		</c:forEach>

@@ -1,7 +1,7 @@
 package com.voson.dataant.util;
 /**
  * Job运行所需要的配置信息
- * @author zhoufang
+ * @author litianwang
  *
  */
 public class RunningJobKeys {

@@ -21,7 +21,6 @@ import com.voson.dataant.socket.SocketLog;
 import com.voson.dataant.socket.master.reqresp.MasterBeHeartBeat;
 import com.voson.dataant.socket.master.reqresp.MasterBeUpdate;
 import com.voson.dataant.socket.master.reqresp.MasterBeWebCancel;
-import com.voson.dataant.socket.master.reqresp.MasterBeWebDebug;
 import com.voson.dataant.socket.master.reqresp.MasterBeWebExecute;
 import com.voson.dataant.socket.protocol.Protocol.Operate;
 import com.voson.dataant.socket.protocol.Protocol.Request;
@@ -68,7 +67,6 @@ public class MasterHandler extends SimpleChannelUpstreamHandler{
 	private MasterBeUpdate beUpdate=new MasterBeUpdate();
 	private MasterBeWebCancel beWebCancel=new MasterBeWebCancel();
 	private MasterBeWebExecute beWebExecute=new MasterBeWebExecute();
-	private MasterBeWebDebug beDebug=new MasterBeWebDebug();
 	
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
@@ -98,12 +96,6 @@ public class MasterHandler extends SimpleChannelUpstreamHandler{
 				completionService.submit(new Callable<ChannelResponse>() {
 					public ChannelResponse call() throws Exception {
 						return  new ChannelResponse(channel,beUpdate.beWebUpdate(context,request));
-					}
-				});
-			}else if(request.getOperate()==WebOperate.ExecuteDebug){
-				completionService.submit(new Callable<ChannelResponse>() {
-					public ChannelResponse call() throws Exception {
-						return new ChannelResponse(channel, beDebug.beWebExecute(context, request));
 					}
 				});
 			}

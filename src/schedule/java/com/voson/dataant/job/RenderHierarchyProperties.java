@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.voson.dataant.store.HierarchyProperties;
-import com.voson.dataant.util.ZeusDateTool;
+import com.voson.dataant.util.DataantDateTool;
 
 public class RenderHierarchyProperties extends HierarchyProperties{
 
@@ -46,7 +46,7 @@ public class RenderHierarchyProperties extends HierarchyProperties{
 			 StringWriter sw=new StringWriter();
 			 try {
 				VelocityContext context=new VelocityContext();
-				context.put("zdt", new ZeusDateTool());
+				context.put("zdt", new DataantDateTool());
 				Velocity.evaluate(context, sw, "", m);
 				if(m.equals(sw.toString())){
 					//渲染后和原数据一样，则直接跳出，如果不跳出会导致死循环
@@ -61,14 +61,14 @@ public class RenderHierarchyProperties extends HierarchyProperties{
 			 matcher=pt.matcher(template);
 		}
 		//${yesterday}变量替换
-		template=template.replace("${yesterday}",new ZeusDateTool().addDay(-1).format("yyyyMMdd"));
+		template=template.replace("${yesterday}",new DataantDateTool().addDay(-1).format("yyyyMMdd"));
 		return template;
 	}
 	
 	
 	public static void main(String[] args) throws Exception{
 		VelocityContext context=new VelocityContext();
-		context.put("zdt", new ZeusDateTool());
+		context.put("zdt", new DataantDateTool());
 		String s="abc${zdt.addDay(-1).format(\"yyyyMMdd\")} ${zdt.addDay(1).format(\"yyyyMMdd\")}";
 		Pattern pt = Pattern.compile("\\$\\{zdt.*\\}");
 		Matcher matcher=pt.matcher(s);

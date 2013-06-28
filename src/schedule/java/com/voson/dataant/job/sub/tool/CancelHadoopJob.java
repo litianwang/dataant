@@ -9,7 +9,7 @@ import com.voson.dataant.job.ProcessJob;
 /**
  * 扫描日志，揪出hadoop任务id，进行kill
  * 
- * @author zhoufang
+ * @author litianwang
  * 
  */
 public class CancelHadoopJob extends ProcessJob {

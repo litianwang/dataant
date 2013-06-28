@@ -20,7 +20,7 @@ import com.voson.dataant.model.JobStatus;
 import com.voson.dataant.model.JobStatus.TriggerType;
 import com.voson.dataant.schedule.mvc.JobController;
 import com.voson.dataant.schedule.mvc.ScheduleInfoLog;
-import com.voson.dataant.schedule.mvc.ZeusJobException;
+import com.voson.dataant.schedule.mvc.DataantJobException;
 import com.voson.dataant.schedule.mvc.event.Events;
 import com.voson.dataant.schedule.mvc.event.JobFailedEvent;
 import com.voson.dataant.schedule.mvc.event.JobSuccessEvent;
@@ -140,7 +140,7 @@ public class Master {
 //			public void run() {
 //				DebugHistory history = context.getDebugHistoryManager()
 //						.findDebugHistory(debugId);
-//				history.getLog().appendZeus(
+//				history.getLog().appendDataant(
 //						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 //								.format(new Date()) + " 开始运行");
 //				context.getDebugHistoryManager().updateDebugHistoryLog(debugId,
@@ -161,11 +161,11 @@ public class Master {
 //				if (!success) {
 //					// 运行失败，更新失败状态，发出失败消息
 //					if (exception != null) {
-//						exception = new ZeusException(String.format(
+//						exception = new DataantException(String.format(
 //								"fileId:%s run failed ", history.getFileId()),
 //								exception);
 //					} else {
-//						exception = new ZeusException(String.format(
+//						exception = new DataantException(String.format(
 //								"fileId:%s run failed ", history.getFileId()));
 //					}
 //					DebugInfoLog.info("debugId:" + debugId + " run fail ");
@@ -195,7 +195,7 @@ public class Master {
 			public void run() {
 				JobHistory history = context.getJobHistoryManager()
 						.findJobHistory(historyId);
-				history.getLog().appendZeus(
+				history.getLog().appendDataant(
 						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 								.format(new Date()) + " 开始运行");
 				context.getJobHistoryManager().updateJobHistoryLog(historyId,
@@ -215,13 +215,13 @@ public class Master {
 
 				if (!success) {
 					// 运行失败，更新失败状态，发出失败消息
-					ZeusJobException jobException = null;
+					DataantJobException jobException = null;
 					if (exception != null) {
-						jobException = new ZeusJobException(history.getJobId(),
+						jobException = new DataantJobException(history.getJobId(),
 								String.format("JobId:%s run failed ",
 										history.getJobId()), exception);
 					} else {
-						jobException = new ZeusJobException(history.getJobId(),
+						jobException = new DataantJobException(history.getJobId(),
 								String.format("JobId:%s run failed ",
 										history.getJobId()));
 					}
@@ -257,7 +257,7 @@ public class Master {
 								.getHistoryId());
 				TriggerType type = his.getTriggerType();
 				ScheduleInfoLog.info("JobId:" + jobId + " run start");
-				his.getLog().appendZeus(
+				his.getLog().appendDataant(
 						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 								.format(new Date()) + " 开始运行");
 				context.getJobHistoryManager().updateJobHistoryLog(his.getId(),
@@ -290,13 +290,13 @@ public class Master {
 
 				if (!success) {
 					// 运行失败，更新失败状态，发出失败消息
-					ZeusJobException jobException = null;
+					DataantJobException jobException = null;
 					if (exception != null) {
-						jobException = new ZeusJobException(jobId,
+						jobException = new DataantJobException(jobId,
 								String.format("JobId:%s run failed ", jobId),
 								exception);
 					} else {
-						jobException = new ZeusJobException(jobId,
+						jobException = new DataantJobException(jobId,
 								String.format("JobId:%s run failed ", jobId));
 					}
 					ScheduleInfoLog.info("JobId:" + jobId
@@ -343,7 +343,7 @@ public class Master {
 //				Profile pf = context.getProfileManager().findByUid(
 //						fd.getOwner());
 //				String maxTimeString = pf.getHadoopConf().get(
-//						"zeus.job.maxtime");
+//						"datatan.job.maxtime");
 //				if (maxTimeString == null || maxTimeString.trim().isEmpty()) {
 //					continue;
 //				}
@@ -379,7 +379,7 @@ public class Master {
 				JobDescriptor jd = context.getGroupManager()
 						.getJobDescriptor(his.getJobId()).getX();
 				String maxTimeString = jd.getProperties().get(
-						"zeus.job.maxtime");
+						"datatan.job.maxtime");
 				if (maxTimeString == null || maxTimeString.trim().isEmpty()) {
 					continue;
 				}
@@ -409,7 +409,7 @@ public class Master {
 			String jobId = entry.getKey();
 			JobDescriptor jd = context.getGroupManager()
 					.getJobDescriptor(jobId).getX();
-			String maxTimeString = jd.getProperties().get("zeus.job.maxtime");
+			String maxTimeString = jd.getProperties().get("datatan.job.maxtime");
 			long maxTime;
 			try {
 				if (maxTimeString == null || maxTimeString.trim().isEmpty()) {
@@ -458,7 +458,7 @@ public class Master {
 //		final StringBuffer content = new StringBuffer(title);
 //		content.append("\n已经运行时间：").append(runTime).append("分钟")
 //				.append("\n设置最大运行时间：").append(maxTime).append("分钟")
-//				.append("\n详情请登录zeus系统查看：http://zeus.taobao.com:9999");
+//				.append("\n详情请登录datatan系统查看：http://datatan.dataant.com:8080");
 //		try {
 //			if (type == 2) {
 //				//此处可以发送IM消息
@@ -470,7 +470,7 @@ public class Master {
 //						try {
 //							Thread.sleep(6000);
 //							mailAlarm.alarm(his.getId(), title.toString(),
-//									content.toString().replace("\n","<br/>").replace("http://zeus.taobao.com:9999", "<a href='http://zeus.taobao.com:9999'>http://zeus.taobao.com:9999</a>"));
+//									content.toString().replace("\n","<br/>").replace("http://datatan.dataant.com:8080", "<a href='http://datatan.dataant.com:8080'>http://datatan.dataant.com:8080</a>"));
 //						} catch (Exception e) {
 //							log.error("send run timeover mail alarm failed", e);
 //						}
@@ -540,7 +540,7 @@ public class Master {
 //		debug.setStatus(com.voson.dataant.model.JobStatus.Status.RUNNING);
 //		debug.setStartTime(new Date());
 //		context.getDebugHistoryManager().updateDebugHistory(debug);
-//		debug.getLog().appendZeus(
+//		debug.getLog().appendDataant(
 //				new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
 //						+ " 进入任务队列");
 //		context.getDebugHistoryManager().updateDebugHistoryLog(debug.getId(),
@@ -554,7 +554,7 @@ public class Master {
 		if (history.getTriggerType() == TriggerType.MANUAL_RECOVER) {
 			for (String job : new ArrayList<String>(context.getQueue())) {
 				if (job.equals(jobId)) {
-					history.getLog().appendZeus("已经在队列中，无法再次运行");
+					history.getLog().appendDataant("已经在队列中，无法再次运行");
 					history.setStartTime(new Date());
 					history.setEndTime(new Date());
 					history.setStatus(com.voson.dataant.model.JobStatus.Status.FAILED);
@@ -564,7 +564,7 @@ public class Master {
 			for (Channel key : context.getWorkers().keySet()) {
 				MasterWorkerHolder worker = context.getWorkers().get(key);
 				if (worker.getRunnings().containsKey(jobId)) {
-					history.getLog().appendZeus("已经在运行中，无法再次运行");
+					history.getLog().appendDataant("已经在运行中，无法再次运行");
 					history.setStartTime(new Date());
 					history.setEndTime(new Date());
 					history.setStatus(com.voson.dataant.model.JobStatus.Status.FAILED);
@@ -574,7 +574,7 @@ public class Master {
 		}
 
 		if (history.getStatus() == com.voson.dataant.model.JobStatus.Status.RUNNING) {
-			history.getLog().appendZeus(
+			history.getLog().appendDataant(
 					new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 							.format(new Date()) + " 进入任务队列");
 			context.getJobHistoryManager().updateJobHistoryLog(history.getId(),

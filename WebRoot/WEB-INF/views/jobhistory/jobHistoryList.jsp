@@ -5,7 +5,13 @@
 
 <html>
 <head>
-	<title>**管理</title>
+	<title>作业日志</title>
+	
+	<script>
+		$(document).ready(function() {
+			$("#sch-jobhistory-tab").addClass("active");
+		});
+	</script>
 </head>
 
 <body>
@@ -28,36 +34,26 @@
 			<th>ID</th>
 			<th>结束时间</th>
 			<th>执行服务器</th>
-			<th>创建时间</th>
-			<th>修改时间</th>
 			<th>说明</th>
 			<th>作业ID</th>
-			<th>日志</th>
 			<th>执行人</th>
-			<th>属性</th>
 			<th>开始时间</th>
 			<th>状态</th>
 			<th>触发类型</th>
-		<th>管理</th>
 		</tr>
 		</thead>
 		<tbody>
-		<c:forEach items="${dataantJobHistorys.content}" var="dataantJobHistory">
+		<c:forEach items="${dataantJobHistorys.content}" var="JobHistory">
 			<tr>
-				<td><a href="${ctx}/dataantjobhistory/update/${dataantJobHistory.id}">${dataantJobHistory.id}</a></td>
-				<td><a href="${ctx}/dataantjobhistory/update/${dataantJobHistory.id}">${dataantJobHistory.endTime}</a></td>
-				<td><a href="${ctx}/dataantjobhistory/update/${dataantJobHistory.id}">${dataantJobHistory.executeHost}</a></td>
-				<td><a href="${ctx}/dataantjobhistory/update/${dataantJobHistory.id}">${dataantJobHistory.gmtCreate}</a></td>
-				<td><a href="${ctx}/dataantjobhistory/update/${dataantJobHistory.id}">${dataantJobHistory.gmtModified}</a></td>
-				<td><a href="${ctx}/dataantjobhistory/update/${dataantJobHistory.id}">${dataantJobHistory.illustrate}</a></td>
-				<td><a href="${ctx}/dataantjobhistory/update/${dataantJobHistory.id}">${dataantJobHistory.jobId}</a></td>
-				<td><a href="${ctx}/dataantjobhistory/update/${dataantJobHistory.id}">${dataantJobHistory.log}</a></td>
-				<td><a href="${ctx}/dataantjobhistory/update/${dataantJobHistory.id}">${dataantJobHistory.operator}</a></td>
-				<td><a href="${ctx}/dataantjobhistory/update/${dataantJobHistory.id}">${dataantJobHistory.properties}</a></td>
-				<td><a href="${ctx}/dataantjobhistory/update/${dataantJobHistory.id}">${dataantJobHistory.startTime}</a></td>
-				<td><a href="${ctx}/dataantjobhistory/update/${dataantJobHistory.id}">${dataantJobHistory.status}</a></td>
-				<td><a href="${ctx}/dataantjobhistory/update/${dataantJobHistory.id}">${dataantJobHistory.triggerType}</a></td>
-				<td><a href="${ctx}/dataantjobhistory/delete/${dataantJobHistory.id}">删除</a></td>
+				<td><a href="${ctx}/jobhistory/update/${JobHistory.id}">${JobHistory.id}</a></td>
+				<td><a href="${ctx}/jobhistory/update/${JobHistory.id}">${JobHistory.endTime}</a></td>
+				<td><a href="${ctx}/jobhistory/update/${JobHistory.id}">${JobHistory.executeHost}</a></td>
+				<td><a href="${ctx}/jobhistory/update/${JobHistory.id}">${JobHistory.illustrate}</a></td>
+				<td><a href="${ctx}/jobhistory/update/${JobHistory.id}">${JobHistory.jobId}</a></td>
+				<td><a href="${ctx}/jobhistory/update/${JobHistory.id}">${JobHistory.operator}</a></td>
+				<td><a href="${ctx}/jobhistory/update/${JobHistory.id}">${JobHistory.startTime}</a></td>
+				<td><a href="${ctx}/jobhistory/update/${JobHistory.id}">${JobHistory.status}</a></td>
+				<td><a href="${ctx}/jobhistory/update/${JobHistory.id}">${JobHistory.triggerType}</a></td>
 			</tr>
 		</c:forEach>
 		</tbody>
@@ -65,6 +61,5 @@
 	
 	<tags:pagination page="${dataantJobHistorys}" paginationSize="5"/>
 
-	<div><a class="btn" href="${ctx}/dataantjobhistory/create">创建**</a></div>
 </body>
 </html>

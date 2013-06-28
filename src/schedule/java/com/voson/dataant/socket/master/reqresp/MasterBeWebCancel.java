@@ -50,7 +50,7 @@ public class MasterBeWebCancel {
 					ret = WebResponse.newBuilder().setRid(req.getRid())
 							.setOperate(req.getOperate()).setStatus(Status.OK)
 							.build();
-					history.getLog().appendZeus("任务被取消");
+					history.getLog().appendDataant("任务被取消");
 					context.getJobHistoryManager().updateJobHistoryLog(
 							history.getId(), history.getLog().getContent());
 					break;
@@ -107,7 +107,7 @@ public class MasterBeWebCancel {
 //					ret = WebResponse.newBuilder().setRid(req.getRid())
 //							.setOperate(req.getOperate()).setStatus(Status.OK)
 //							.build();
-//					history.getLog().appendZeus("任务被取消");
+//					history.getLog().appendDataant("任务被取消");
 //					context.getDebugHistoryManager().updateDebugHistoryLog(
 //							history.getId(), history.getLog().getContent());
 //					break;
@@ -160,7 +160,7 @@ public class MasterBeWebCancel {
 					ret = WebResponse.newBuilder().setRid(req.getRid())
 							.setOperate(req.getOperate()).setStatus(Status.OK)
 							.build();
-					history.getLog().appendZeus("任务被取消");
+					history.getLog().appendDataant("任务被取消");
 					context.getJobHistoryManager().updateJobHistoryLog(
 							history.getId(), history.getLog().getContent());
 					break;

@@ -4,7 +4,7 @@ import com.voson.dataant.model.JobStatus.TriggerType;
 import com.voson.dataant.mvc.AppEvent;
 /**
  * Job执行成功事件
- * @author zhoufang
+ * @author litianwang
  *
  */
 public class JobSuccessEvent extends AppEvent{

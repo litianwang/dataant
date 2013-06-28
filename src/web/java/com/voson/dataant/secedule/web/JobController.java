@@ -7,6 +7,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -42,7 +43,7 @@ import com.voson.dataant.store.mysql.persistence.JobPersistence;
 @RequestMapping(value = "/job")
 public class JobController {
 
-	private static final int PAGE_SIZE = 3;
+	private static final int PAGE_SIZE = 10;
 
 	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
 	static {
@@ -116,6 +117,28 @@ public class JobController {
 	public String run(@PathVariable("id") String id, @PathVariable("type")int type) throws Exception {
 		jobService.runJob(id, type);
 		return "redirect:/job/";
+	}
+	
+	public JobPersistence buildJobPersistence(JobPersistence newJob){
+		if(StringUtils.isBlank(newJob.getConfigs())){
+			newJob.setConfigs("{}");
+		}
+		if(StringUtils.isBlank(newJob.getReadyDependency())){
+			newJob.setReadyDependency("{}");
+		}
+		if(StringUtils.isBlank(newJob.getResources())){
+			newJob.setResources("[]");
+		}
+		if(StringUtils.isBlank(newJob.getPreProcessers())){
+			newJob.setPreProcessers("[]");
+		}
+		if(StringUtils.isBlank(newJob.getPostProcessers())){
+			newJob.setPostProcessers("[]");
+		}
+		if(StringUtils.isBlank(newJob.getOwner())){
+			newJob.setOwner("litianwang");
+		}
+		return newJob;
 	}
 
 

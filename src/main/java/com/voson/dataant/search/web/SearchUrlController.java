@@ -51,7 +51,7 @@ import com.voson.dataant.search.service.SearchUrlService;
 @RequestMapping(value = "/searchurl")
 public class SearchUrlController {
 
-	private static final int PAGE_SIZE = 3;
+	private static final int PAGE_SIZE = 10;
 
 	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
 	static {

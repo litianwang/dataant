@@ -23,7 +23,7 @@ import com.voson.dataant.util.Environment;
 
 /**
  * 分布式服务器的检测器
- * 每隔一分钟查询一次数据库的zeus_lock表
+ * 每隔一分钟查询一次数据库的dataant_lock表
  * @author litianwang
  *
  */
@@ -40,7 +40,7 @@ public class DistributeLocker {
 	@Autowired
 	private ClientWorker worker;
 	
-	private ZeusSchedule zeusSchedule;
+	private DataantSchedule dataantSchedule;
 	
 	private int port=9887;
 	
@@ -61,7 +61,7 @@ public class DistributeLocker {
 	}
 	
 	public void init() throws Exception{
-		zeusSchedule=new ZeusSchedule(applicationContext);
+		dataantSchedule=new DataantSchedule(applicationContext);
 		ScheduledExecutorService service=Executors.newScheduledThreadPool(3);
 		service.scheduleAtFixedRate(new Runnable() {
 			
@@ -77,9 +77,9 @@ public class DistributeLocker {
 	}
 	/**
 	 * 定时扫描任务
-	 * 每隔一分钟扫描一次zeus_lock表
+	 * 每隔一分钟扫描一次dataant_lock表
 	 * 判断ScheduleServer是否正常运行
-	 * @author zhoufang
+	 * @author litianwang
 	 *
 	 */
 	private void update(){
@@ -102,7 +102,7 @@ public class DistributeLocker {
 			lock.setServerUpdate(new Date());
 			distributeLockDao.save(lock);
 			
-			zeusSchedule.startup(port);
+			dataantSchedule.startup(port);
 		}else{//其他服务器抢占了锁
 			log.error("not my locker");
 			//如果最近更新时间在2分钟以上，则认为抢占的Master服务器已经失去连接，本服务器主动进行抢占
@@ -112,9 +112,9 @@ public class DistributeLocker {
 				lock.setServerUpdate(new Date());
 				lock.setSubgroup(Environment.getScheduleGroup());
 				distributeLockDao.save(lock);
-				zeusSchedule.startup(port);
+				dataantSchedule.startup(port);
 			}else{//如果Master服务器没有问题，本服务器停止server角色
-				zeusSchedule.shutdown();
+				dataantSchedule.shutdown();
 			}
 			
 		}

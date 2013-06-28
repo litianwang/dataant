@@ -9,7 +9,7 @@
 ///**
 // * 任务失败的监听
 // * 当任务失败，需要发送邮件给相关人员
-// * @author zhoufang
+// * @author litianwang
 // *
 // */
 //public class JobSuccessListener extends DispatcherListener{

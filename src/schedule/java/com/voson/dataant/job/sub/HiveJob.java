@@ -22,12 +22,12 @@ import com.voson.dataant.util.PropertyKeys;
 /**
  * 添加重试功能，如果任务在10分钟内失败，则进行重试
  * 
- * @author zhoufang
+ * @author litianwang
  * 
  */
 public class HiveJob extends ProcessJob {
 	private static Logger log=LoggerFactory.getLogger(HiveJob.class);
-	public static final String UDF_SQL_NAME = "zeus_udf.sql";
+	public static final String UDF_SQL_NAME = "dataant_udf.sql";
 	////private FileManager fileManager;
 	private ApplicationContext applicationContext;
 
@@ -68,10 +68,10 @@ public class HiveJob extends ProcessJob {
 		OutputStreamWriter writer = null;
 		try {
 			writer = new OutputStreamWriter(new FileOutputStream(f),
-					Charset.forName(jobContext.getProperties().getProperty("zeus.fs.encode", "utf-8")));
+					Charset.forName(jobContext.getProperties().getProperty("dataant.fs.encode", "utf-8")));
 			writer.write(script.replaceAll("^--.*", ""));
 		} catch (Exception e) {
-			jobContext.getJobHistory().getLog().appendZeusException(e);
+			jobContext.getJobHistory().getLog().appendDataantException(e);
 		} finally {
 			IOUtils.closeQuietly(writer);
 		}

@@ -78,7 +78,7 @@ public class WorkerBeExecute {
 							exitCode = job.run();
 						} catch (Exception e) {
 							exception = e;
-							history.getLog().appendZeusException(e);
+							history.getLog().appendDataantException(e);
 						} finally {
 							JobHistory jobHistory = context
 									.getJobHistoryManager()
@@ -95,7 +95,7 @@ public class WorkerBeExecute {
 								
 								context.getJobHistoryManager().updateJobHistory(
 										jobHistory);
-								history.getLog().appendZeus("exitCode=" + exitCode);
+								history.getLog().appendDataant("exitCode=" + exitCode);
 								context.getJobHistoryManager().updateJobHistoryLog(
 										history.getId(),
 										history.getLog().getContent());
@@ -127,88 +127,6 @@ public class WorkerBeExecute {
 				});
 		return f;
 	}
-
-//	public Future<Response> debug(final WorkerContext context, final Request req) {
-//		DebugMessage dm = null;
-//		try {
-//			dm = DebugMessage.newBuilder().mergeFrom(req.getBody()).build();
-//		} catch (InvalidProtocolBufferException e1) {
-//		}
-//		SocketLog.info("receive master to worker debug request,rid="
-//				+ req.getRid() + ",debugId=" + dm.getDebugId());
-//		final String debugId = dm.getDebugId();
-//		final DebugHistory history = context.getDebugHistoryManager()
-//				.findDebugHistory(debugId);
-//		Future<Response> f = context.getThreadPool().submit(
-//				new Callable<Response>() {
-//					public Response call() throws Exception {
-//						history.setExecuteHost(WorkerContext.host);
-//						history.setStartTime(new Date());
-//						context.getDebugHistoryManager().updateDebugHistory(
-//								history);
-//
-//						String date = new SimpleDateFormat("yyyy-MM-dd")
-//								.format(new Date());
-//						File direcotry = new File(Environment.getDownloadPath()
-//								+ File.separator + date + File.separator
-//								+ "debug-" + history.getId());
-//						if (!direcotry.exists()) {
-//							direcotry.mkdirs();
-//						}
-//						final Job job = JobUtils.createDebugJob(
-//								new JobContext(JobContext.DEBUG_RUN), history, direcotry
-//										.getAbsolutePath(), context
-//										.getApplicationContext());
-//						context.getDebugRunnings().put(debugId, job);
-//
-//						Integer exitCode = -1;
-//						Exception exception = null;
-//						try {
-//							exitCode = job.run();
-//						} catch (Exception e) {
-//							exception = e;
-//							history.getLog().appendZeusException(e);
-//						} finally {
-//							DebugHistory debugHistory = context
-//									.getDebugHistoryManager()
-//									.findDebugHistory(history.getId());
-//							debugHistory.setEndTime(new Date());
-//							if (exitCode == 0) {
-//								debugHistory
-//										.setStatus(com.voson.dataant.model.JobStatus.Status.SUCCESS);
-//							} else {
-//								debugHistory
-//										.setStatus(com.voson.dataant.model.JobStatus.Status.FAILED);
-//							}
-//							context.getDebugHistoryManager()
-//									.updateDebugHistory(debugHistory);
-//							history.getLog().appendZeus("exitCode=" + exitCode);
-//							context.getDebugHistoryManager()
-//									.updateDebugHistoryLog(history.getId(),
-//											history.getLog().getContent());
-//							context.getDebugRunnings().remove(debugId);
-//						}
-//
-//						Status status = Status.OK;
-//						String errorText = "";
-//						if (exitCode != 0) {
-//							status = Status.ERROR;
-//						}
-//						if (exception != null && exception.getMessage() != null) {
-//							errorText = exception.getMessage();
-//						}
-//						Response resp = Response.newBuilder().setRid(
-//								req.getRid()).setOperate(Operate.Debug)
-//								.setStatus(status).setErrorText(errorText)
-//								.build();
-//						SocketLog
-//								.info("send debug response,debug complete,rid="
-//										+ req.getRid() + ",debugId=" + debugId);
-//						return resp;
-//					}
-//				});
-//		return f;
-//	}
 
 	private Future<Response> schedule(final WorkerContext context,
 			final Request req) {
@@ -267,7 +185,7 @@ public class WorkerBeExecute {
 							exitCode = job.run();
 						} catch (Exception e) {
 							exception = e;
-							history.getLog().appendZeusException(e);
+							history.getLog().appendDataantException(e);
 						} finally {
 							JobHistory jobHistory = context
 									.getJobHistoryManager()
@@ -282,7 +200,7 @@ public class WorkerBeExecute {
 							}
 							context.getJobHistoryManager().updateJobHistory(
 									jobHistory);
-							history.getLog().appendZeus("exitCode=" + exitCode);
+							history.getLog().appendDataant("exitCode=" + exitCode);
 							context.getJobHistoryManager().updateJobHistoryLog(
 									history.getId(),
 									history.getLog().getContent());

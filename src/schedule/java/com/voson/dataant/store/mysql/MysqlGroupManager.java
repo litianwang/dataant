@@ -28,7 +28,7 @@ import com.voson.dataant.store.mysql.persistence.dao.GroupPersistenceDao;
 import com.voson.dataant.store.mysql.persistence.dao.JobPersistenceDao;
 import com.voson.dataant.store.mysql.tool.PersistenceAndBeanConvert;
 import com.voson.dataant.util.Tuple;
-import com.voson.dataant.util.ZeusException;
+import com.voson.dataant.util.DataantException;
 @SuppressWarnings("unchecked")
 public class MysqlGroupManager implements GroupManager{
 	
@@ -39,16 +39,16 @@ public class MysqlGroupManager implements GroupManager{
 	JobPersistenceDao JobPersistenceDao;
 	
 	@Override
-	public void deleteGroup(String user, String groupId) throws ZeusException {
+	public void deleteGroup(String user, String groupId) throws DataantException {
 		
 		GroupBean group=getDownstreamGroupBean(groupId);
 		if(group.isDirectory()){
 			if(!group.getChildrenGroupBeans().isEmpty()){
-				throw new ZeusException("该组下不为空，无法删除");
+				throw new DataantException("该组下不为空，无法删除");
 			}
 		}else{
 			if(!group.getJobBeans().isEmpty()){
-				throw new ZeusException("该组下不为空，无法删除");
+				throw new DataantException("该组下不为空，无法删除");
 			}
 		}
 		groupPersistenceDao.delete(Integer.valueOf(groupId));
@@ -56,7 +56,7 @@ public class MysqlGroupManager implements GroupManager{
 	}
 
 	@Override
-	public void deleteJob(String user, String jobId) throws ZeusException {
+	public void deleteJob(String user, String jobId) throws DataantException {
 		GroupBean root= getGlobeGroupBean();
 		JobBean job=root.getAllSubJobBeans().get(jobId);
 		if(!job.getDepender().isEmpty()){
@@ -64,7 +64,7 @@ public class MysqlGroupManager implements GroupManager{
 			for(JobBean jb:job.getDepender()){
 				deps.add(jb.getJobDescriptor().getId());
 			}
-			throw new ZeusException("该Job正在被其他Job"+deps.toString()+"依赖，无法删除");
+			throw new DataantException("该Job正在被其他Job"+deps.toString()+"依赖，无法删除");
 		}
 		JobPersistenceDao.delete(Long.valueOf(jobId));
 		//getHibernateTemplate().delete(getHibernateTemplate().get(JobPersistence.class, Long.valueOf(jobId)));
@@ -193,7 +193,7 @@ public class MysqlGroupManager implements GroupManager{
 //				if(list==null || list.size()==0){
 //					GroupPersistence persist=new GroupPersistence();
 //					persist.setName("众神之神");
-//					////persist.setOwner(ZeusUser.ADMIN.getUid());
+//					////persist.setOwner(DataantUser.ADMIN.getUid());
 //					persist.setDirectory(0);
 //					session.save(persist);
 //					if(persist.getId()==null){
@@ -217,13 +217,13 @@ public class MysqlGroupManager implements GroupManager{
 	}
 
 	@Override
-	public void updateGroup(String user,GroupDescriptor group) throws ZeusException{
+	public void updateGroup(String user,GroupDescriptor group) throws DataantException{
 		// GroupPersistence old=(GroupPersistence) getHibernateTemplate().get(GroupPersistence.class, Integer.valueOf(group.getId()));
 		GroupPersistence old= groupPersistenceDao.findOne(Integer.valueOf(group.getId()));
 		updateGroup(user, group, old.getOwner(),old.getParent()==null?null:old.getParent().toString());
 	}
 	
-	public void updateGroup(String user,GroupDescriptor group,String owner,String parent) throws ZeusException{
+	public void updateGroup(String user,GroupDescriptor group,String owner,String parent) throws DataantException{
 		GroupPersistence old= groupPersistenceDao.findOne(Integer.valueOf(group.getId()));
 		//GroupPersistence old=(GroupPersistence) getHibernateTemplate().get(GroupPersistence.class, Integer.valueOf(group.getId()));
 		
@@ -246,13 +246,13 @@ public class MysqlGroupManager implements GroupManager{
 	
 
 	@Override
-	public void updateJob(String user,JobDescriptor job) throws ZeusException {
+	public void updateJob(String user,JobDescriptor job) throws DataantException {
 		JobPersistence orgPersist = JobPersistenceDao.findOne(Long.valueOf(job.getId()));
 		// JobPersistence orgPersist=(JobPersistence) getHibernateTemplate().get(JobPersistence.class, Long.valueOf(job.getId()));
 		updateJob(user, job, orgPersist.getOwner(),orgPersist.getGroupId().toString());
 	}
 	
-	public void updateJob(String user,JobDescriptor job,String owner,String groupId) throws ZeusException {
+	public void updateJob(String user,JobDescriptor job,String owner,String groupId) throws DataantException {
 		JobPersistence orgPersist = JobPersistenceDao.findOne(Long.valueOf(job.getId()));
 		//JobPersistence orgPersist=(JobPersistence) getHibernateTemplate().get(JobPersistence.class, Long.valueOf(job.getId()));
 		if(job.getScheduleType()==JobScheduleType.Independent){
@@ -281,9 +281,9 @@ public class MysqlGroupManager implements GroupManager{
 
 	@Override
 	public GroupDescriptor createGroup(String user, String groupName,
-			String parentGroup, boolean isDirectory) throws ZeusException {
+			String parentGroup, boolean isDirectory) throws DataantException {
 		if(parentGroup==null){
-			throw new ZeusException("parent group may not be null");
+			throw new DataantException("parent group may not be null");
 		}
 		GroupDescriptor group=new GroupDescriptor();
 		group.setOwner(user);
@@ -306,10 +306,10 @@ public class MysqlGroupManager implements GroupManager{
 
 	@Override
 	public JobDescriptor createJob(String user, String jobName,
-			String parentGroup,JobRunType jobType) throws ZeusException {
+			String parentGroup,JobRunType jobType) throws DataantException {
 		GroupDescriptor parent=getGroupDescriptor(parentGroup);
 		if(parent.isDirectory()){
-			throw new ZeusException("目录组下不得创建Job");
+			throw new DataantException("目录组下不得创建Job");
 		}
 		JobDescriptor job=new JobDescriptor();
 		job.setOwner(user);
@@ -372,7 +372,7 @@ public class MysqlGroupManager implements GroupManager{
 	}
 
 	@Override
-	public void grantGroupOwner(String granter, String uid, String groupId) throws ZeusException {
+	public void grantGroupOwner(String granter, String uid, String groupId) throws DataantException {
 		GroupDescriptor gd=getGroupDescriptor(groupId);
 		if(gd!=null){
 			updateGroup(granter, gd,uid,gd.getParent());
@@ -380,7 +380,7 @@ public class MysqlGroupManager implements GroupManager{
 	}
 
 	@Override
-	public void grantJobOwner(String granter, String uid, String jobId)throws ZeusException {
+	public void grantJobOwner(String granter, String uid, String jobId)throws DataantException {
 		Tuple<JobDescriptor, JobStatus> job=getJobDescriptor(jobId);
 		if(job!=null){
 			job.getX().setOwner(uid);
@@ -389,22 +389,22 @@ public class MysqlGroupManager implements GroupManager{
 	}
 
 	@Override
-	public void moveJob(String uid,String jobId, String groupId) throws ZeusException {
+	public void moveJob(String uid,String jobId, String groupId) throws DataantException {
 		JobDescriptor jd=getJobDescriptor(jobId).getX();
 		GroupDescriptor gd=getGroupDescriptor(groupId);
 		if(gd.isDirectory()){
-			throw new ZeusException("非法操作");
+			throw new DataantException("非法操作");
 		}
 		updateJob(uid, jd, jd.getOwner(), groupId);
 	}
 
 	@Override
 	public void moveGroup(String uid,String groupId, String newParentGroupId)
-			throws ZeusException {
+			throws DataantException {
 		GroupDescriptor gd=getGroupDescriptor(groupId);
 		GroupDescriptor parent=getGroupDescriptor(newParentGroupId);
 		if(!parent.isDirectory()){
-			throw new ZeusException("非法操作");
+			throw new DataantException("非法操作");
 		}
 		updateGroup(uid, gd, gd.getOwner(), newParentGroupId);
 	}

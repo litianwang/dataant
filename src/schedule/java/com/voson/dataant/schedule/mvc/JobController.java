@@ -3,6 +3,7 @@ package com.voson.dataant.schedule.mvc;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -37,8 +38,9 @@ import com.voson.dataant.socket.master.MasterContext;
 import com.voson.dataant.store.GroupManager;
 import com.voson.dataant.store.JobBean;
 import com.voson.dataant.store.JobHistoryManager;
+import com.voson.dataant.util.DataantException;
+import com.voson.dataant.util.ExitCodes;
 import com.voson.dataant.util.PropertyKeys;
-import com.voson.dataant.util.ZeusException;
 
 public class JobController extends Controller{
 
@@ -140,7 +142,7 @@ public class JobController extends Controller{
 					jd.setAuto(false);
 					try {
 						groupManager.updateJob(jd.getOwner(), jd);
-					} catch (ZeusException e1) {
+					} catch (DataantException e1) {
 						log.error("JobId:"+jobId+" 更新失败",e1);
 					}
 					cache.refresh();
@@ -251,7 +253,7 @@ public class JobController extends Controller{
 			context.getJobHistoryManager().addJobHistory(history);
 			history=master.run(history);
 			if(history.getStatus()==Status.FAILED){
-				ZeusJobException exception=new ZeusJobException(history.getJobId(),history.getLog().getContent());
+				DataantJobException exception=new DataantJobException(history.getJobId(),history.getLog().getContent());
 				JobFailedEvent jfe=new JobFailedEvent(jobDescriptor.getId(),event.getTriggerType(),history,exception);
 				ScheduleInfoLog.info("JobId:"+jobId+" is fail,dispatch the fail event");
 				//广播消息
@@ -281,7 +283,7 @@ public class JobController extends Controller{
 		if(jobDescriptor.getDependencies().contains(event.getJobId())){//本Job依赖失败的Job
 			if(event.getTriggerType()==TriggerType.SCHEDULE){//依赖的Job 的失败类型是 SCHEDULE类型
 				//自身依赖的Job失败了，表明自身也无法继续执行，抛出失败的消息
-				ZeusJobException exception=new ZeusJobException(event.getJobException().getCauseJobId(),"jobId:"+jobDescriptor.getId()+" 失败，原因是依赖的Job："+event.getJobId()+" 执行失败",
+				DataantJobException exception=new DataantJobException(event.getJobException().getCauseJobId(),"jobId:"+jobDescriptor.getId()+" 失败，原因是依赖的Job："+event.getJobId()+" 执行失败",
 						event.getJobException());
 				ScheduleInfoLog.info("jobId:"+jobId+" is fail,as dependendy jobId:"+jobDescriptor.getId()+" is failed");
 				//记录进History日志
@@ -292,7 +294,7 @@ public class JobController extends Controller{
 				history.setJobId(jobId);
 				history.setTriggerType(event.getTriggerType());
 				history.setStatus(Status.FAILED);
-				history.getLog().appendZeusException(exception);
+				history.getLog().appendDataantException(exception);
 				history=jobHistoryManager.addJobHistory(history);
 				jobHistoryManager.updateJobHistoryLog(history.getId(), history.getLog().getContent());
 				
@@ -434,9 +436,9 @@ public class JobController extends Controller{
 				if(!success){
 					//运行失败，更新失败状态，发出失败消息
 					if(exception!=null){
-						exception=new ZeusException(String.format("JobId:%s run failed ", jobDescriptor.getId()), exception);
+						exception=new DataantException(String.format("JobId:%s run failed ", jobDescriptor.getId()), exception);
 					}else{
-						exception=new ZeusException(String.format("JobId:%s run failed ", jobDescriptor.getId()));
+						exception=new DataantException(String.format("JobId:%s run failed ", jobDescriptor.getId()));
 					}
 					ScheduleInfoLog.info("JobId:"+jobId+" run fail and dispatch the fail event");
 					JobFailedEvent jfe=new JobFailedEvent(jobDescriptor.getId(),type,jobHistoryManager.findJobHistory(history.getId()),exception);

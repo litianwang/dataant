@@ -8,7 +8,7 @@ import com.voson.dataant.schedule.mvc.event.Events;
  * 阻止Job任务进行自动调度(包含自动调度和手动恢复)
  * 预发环境下使用
  * 预发环境不允许运行自动调度，手动恢复，只能运行手动调度
- * @author zhoufang
+ * @author litianwang
  *
  */
 public class StopScheduleJobListener extends DispatcherListener{

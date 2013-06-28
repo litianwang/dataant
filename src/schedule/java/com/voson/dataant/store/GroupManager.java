@@ -9,7 +9,7 @@ import com.voson.dataant.model.JobDescriptor;
 import com.voson.dataant.model.JobStatus;
 import com.voson.dataant.model.JobDescriptor.JobRunType;
 import com.voson.dataant.util.Tuple;
-import com.voson.dataant.util.ZeusException;
+import com.voson.dataant.util.DataantException;
 
 
 public interface GroupManager {
@@ -88,14 +88,14 @@ public interface GroupManager {
 	 * @param user
 	 * @return
 	 */
-	GroupDescriptor createGroup(String user,String groupName,String parentGroup,boolean isDirectory) throws ZeusException;
+	GroupDescriptor createGroup(String user,String groupName,String parentGroup,boolean isDirectory) throws DataantException;
 	/**
 	 * 创建一个Job
 	 * @param user
 	 * @param group
 	 * @return
 	 */
-	JobDescriptor createJob(String user,String jobName,String parentGroup,JobRunType jobType) throws ZeusException;
+	JobDescriptor createJob(String user,String jobName,String parentGroup,JobRunType jobType) throws DataantException;
 	/**
 	 * 删除组，成功删除需要的条件：
 	 * 1.操作人是该组的创建者
@@ -104,7 +104,7 @@ public interface GroupManager {
 	 * @param groupId
 	 * @return
 	 */
-	void deleteGroup(String user,String groupId) throws ZeusException;
+	void deleteGroup(String user,String groupId) throws DataantException;
 	/**
 	 * 删除一个Job
 	 * 1.该job没有被其他job依赖
@@ -112,33 +112,33 @@ public interface GroupManager {
 	 * @param user
 	 * @param jobId
 	 * @return
-	 * @throws ZeusException
+	 * @throws DataantException
 	 */
-	void deleteJob(String user,String jobId) throws ZeusException;
+	void deleteJob(String user,String jobId) throws DataantException;
 	/**
 	 * 更新Job
 	 * @param job
 	 * @return
 	 */
-	void updateJob(String user,JobDescriptor job) throws ZeusException;
+	void updateJob(String user,JobDescriptor job) throws DataantException;
 	/**
 	 * 更新Group
 	 * @param group
 	 * @return
 	 */
-	void updateGroup(String user,GroupDescriptor group) throws ZeusException;
+	void updateGroup(String user,GroupDescriptor group) throws DataantException;
 	/**
 	 * 更新Job状态
 	 * @param jobStatus
-	 * @throws ZeusException
+	 * @throws DataantException
 	 */
 	void updateJobStatus(JobStatus jobStatus);
 	
-	void grantJobOwner(String granter,String uid,String jobId)throws ZeusException;
+	void grantJobOwner(String granter,String uid,String jobId)throws DataantException;
 	
-	void grantGroupOwner(String granter,String uid,String groupId)throws ZeusException;
+	void grantGroupOwner(String granter,String uid,String groupId)throws DataantException;
 	
-	void moveJob(String uid,String jobId,String groupId) throws ZeusException;
+	void moveJob(String uid,String jobId,String groupId) throws DataantException;
 	
-	void moveGroup(String uid,String groupId,String newParentGroupId) throws ZeusException;
+	void moveGroup(String uid,String groupId,String newParentGroupId) throws DataantException;
 }

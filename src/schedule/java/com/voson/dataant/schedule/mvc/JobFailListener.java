@@ -13,7 +13,7 @@
 ///**
 // * 任务失败的监听
 // * 当任务失败，需要发送邮件给相关人员
-// * @author zhoufang
+// * @author litianwang
 // *
 // */
 //public class JobFailListener extends DispatcherListener{
@@ -61,7 +61,7 @@
 //				}
 //				final ChainException chain=chainLocal.get();
 //				final JobBean jobBean=chain.gb.getAllSubJobBeans().get(jobId);
-//				final ZeusUser owner=userManager.findByUid(jobBean.getJobDescriptor().getOwner());
+//				final DataantUser owner=userManager.findByUid(jobBean.getJobDescriptor().getOwner());
 //				//延迟6秒发送邮件，保证日志已经输出到数据库
 //				new Thread(){
 //					public void run() {
@@ -81,7 +81,7 @@
 //							sb.append("Job任务的触发类型为:"+type).append("<br/>");
 //							if(event.getHistory()!=null){
 //								sb.append("失败原因:"+jobHistoryManager.findJobHistory(event.getHistory().getId()).getLog().getContent().replaceAll("\\n", "<br/>"));
-//								String msg= "Zeus报警 JobId:"+jobId+" 任务运行失败";
+//								String msg= "Dataant报警 JobId:"+jobId+" 任务运行失败";
 //								if(!jobBean.getDepender().isEmpty()){
 //									msg+=",影响范围:"+getDependencyJobs(jobBean);
 //								}

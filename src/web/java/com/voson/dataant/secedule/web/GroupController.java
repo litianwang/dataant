@@ -42,7 +42,7 @@ import com.voson.dataant.store.mysql.persistence.GroupPersistence;
 @RequestMapping(value = "/group")
 public class GroupController {
 
-	private static final int PAGE_SIZE = 3;
+	private static final int PAGE_SIZE = 10;
 
 	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
 	static {

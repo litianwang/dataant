@@ -21,86 +21,86 @@
 		<input type="hidden" name="id" value="${dataantJobHistory.id}"/>
 		<fieldset>
 			<legend><small>管理任务</small></legend>
+			
 			<div class="control-group">
-				<label for="description" class="control-label">ID:</label>
-				<div class="controls">
-					<textarea id="id" name="id" class="input-large">${dataantJobHistory.id}</textarea>
-				</div>
+				<label for="id" class="control-label">ID:</label>
+					<div class="controls">
+						<input id="id" name="id" class="input-large" value="${dataantJobHistory.id}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">结束时间:</label>
-				<div class="controls">
-					<textarea id="endTime" name="endTime" class="input-large">${dataantJobHistory.endTime}</textarea>
-				</div>
+				<label for="endTime" class="control-label">结束时间:</label>
+					<div class="controls">
+						<input id="endTime" name="endTime" class="input-large" value="${dataantJobHistory.endTime}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">执行服务器:</label>
-				<div class="controls">
-					<textarea id="executeHost" name="executeHost" class="input-large">${dataantJobHistory.executeHost}</textarea>
-				</div>
+				<label for="executeHost" class="control-label">执行服务器:</label>
+					<div class="controls">
+						<input id="executeHost" name="executeHost" class="input-xlarge" value="${dataantJobHistory.executeHost}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">创建时间:</label>
-				<div class="controls">
-					<textarea id="gmtCreate" name="gmtCreate" class="input-large">${dataantJobHistory.gmtCreate}</textarea>
-				</div>
+				<label for="gmtCreate" class="control-label">创建时间:</label>
+					<div class="controls">
+						<input id="gmtCreate" name="gmtCreate" class="input-large" value="${dataantJobHistory.gmtCreate}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">修改时间:</label>
-				<div class="controls">
-					<textarea id="gmtModified" name="gmtModified" class="input-large">${dataantJobHistory.gmtModified}</textarea>
-				</div>
+				<label for="gmtModified" class="control-label">修改时间:</label>
+					<div class="controls">
+						<input id="gmtModified" name="gmtModified" class="input-large" value="${dataantJobHistory.gmtModified}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">说明:</label>
-				<div class="controls">
-					<textarea id="illustrate" name="illustrate" class="input-large">${dataantJobHistory.illustrate}</textarea>
-				</div>
+				<label for="illustrate" class="control-label">说明:</label>
+					<div class="controls">
+						<input id="illustrate" name="illustrate" class="input-xlarge" value="${dataantJobHistory.illustrate}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">作业ID:</label>
-				<div class="controls">
-					<textarea id="jobId" name="jobId" class="input-large">${dataantJobHistory.jobId}</textarea>
-				</div>
+				<label for="jobId" class="control-label">作业ID:</label>
+					<div class="controls">
+						<input id="jobId" name="jobId" class="input-large" value="${dataantJobHistory.jobId}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">日志:</label>
-				<div class="controls">
-					<textarea id="log" name="log" class="input-large">${dataantJobHistory.log}</textarea>
-				</div>
+				<label for="log" class="control-label">日志:</label>
+					<div class="controls">
+						<textarea id="log" name="log" rows="12" class="input-xxlarge">${dataantJobHistory.log}</textarea>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">执行人:</label>
-				<div class="controls">
-					<textarea id="operator" name="operator" class="input-large">${dataantJobHistory.operator}</textarea>
-				</div>
+				<label for="operator" class="control-label">执行人:</label>
+					<div class="controls">
+						<input id="operator" name="operator" class="input-xlarge" value="${dataantJobHistory.operator}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">属性:</label>
-				<div class="controls">
-					<textarea id="properties" name="properties" class="input-large">${dataantJobHistory.properties}</textarea>
-				</div>
+				<label for="properties" class="control-label">属性:</label>
+					<div class="controls">
+						<input id="properties" name="properties" class="input-xlarge" value="${dataantJobHistory.properties}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">开始时间:</label>
-				<div class="controls">
-					<textarea id="startTime" name="startTime" class="input-large">${dataantJobHistory.startTime}</textarea>
-				</div>
+				<label for="startTime" class="control-label">开始时间:</label>
+					<div class="controls">
+						<input id="startTime" name="startTime" class="input-large" value="${dataantJobHistory.startTime}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">状态:</label>
-				<div class="controls">
-					<textarea id="status" name="status" class="input-large">${dataantJobHistory.status}</textarea>
-				</div>
+				<label for="status" class="control-label">状态:</label>
+					<div class="controls">
+						<input id="status" name="status" class="input-xlarge" value="${dataantJobHistory.status}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">触发类型:</label>
-				<div class="controls">
-					<textarea id="triggerType" name="triggerType" class="input-large">${dataantJobHistory.triggerType}</textarea>
-				</div>
+				<label for="triggerType" class="control-label">触发类型:</label>
+					<div class="controls">
+						<input id="triggerType" name="triggerType" class="input-large" value="${dataantJobHistory.triggerType}"/>
+					</div>
 			</div>	
 			<div class="form-actions">
-				<input id="submit_btn" class="btn btn-primary" type="submit" value="提交"/>&nbsp;	
 				<input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
 			</div>
 		</fieldset>

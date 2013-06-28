@@ -5,7 +5,7 @@ package com.voson.dataant.util;
  * Job相关的配置信息，以 job. 前缀开头
  * Group相关的配置信息，以group. 前缀开头
  * 
- * @author Administrator
+ * @author litianwang
  *
  */
 public class PropertyKeys extends RunningJobKeys{
@@ -49,5 +49,5 @@ public class PropertyKeys extends RunningJobKeys{
 	/**
 	 * 依赖关系的周期设定
 	 */
-	public static final String DEPENDENCY_CYCLE="zeus.dependency.cycle";
+	public static final String DEPENDENCY_CYCLE="datatan.dependency.cycle";
 }

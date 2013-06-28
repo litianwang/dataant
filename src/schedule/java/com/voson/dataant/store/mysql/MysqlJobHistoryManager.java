@@ -6,13 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import com.voson.dataant.model.JobHistory;
 import com.voson.dataant.store.JobHistoryManager;
@@ -21,46 +16,26 @@ import com.voson.dataant.store.mysql.persistence.dao.JobHistoryPersistenceDao;
 import com.voson.dataant.store.mysql.tool.PersistenceAndBeanConvert;
 public class MysqlJobHistoryManager implements JobHistoryManager{
 	
-	private TransactionTemplate transactionTemplate;
-	
+
 	@Autowired
-	private PlatformTransactionManager transactionManager;
-	
-	public TransactionTemplate getTransactionTemplate(){
-		if(null == transactionTemplate){
-			transactionTemplate = new TransactionTemplate(transactionManager);
-		}
-		return transactionTemplate;
-	}
+	JobHistoryPersistenceDao jobPersistenceDao; 
 
-	@SuppressWarnings("unchecked")
+
 	@Override
+	@Transactional(readOnly = false,propagation=Propagation.REQUIRES_NEW)
 	public void updateJobHistoryLog(final String id, final String log) {
-//		JobHistoryPersistence p = dao.findOne(Long.valueOf(id));
-//		p.setLog(log);
-//		dao.save(p);
-		  getTransactionTemplate().setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-		   getTransactionTemplate().execute(new TransactionCallback(){   // 使用带返回值的事务回调接口
-		    public Object doInTransaction(TransactionStatus arg0) {
-		    	return jobPersistenceDao.updateLog(log, Long.valueOf(id));
-		    }   
-		   });
+		jobPersistenceDao.updateLog(log, Long.valueOf(id));
 	}
 
 	@Override
+	@Transactional(readOnly = false,propagation=Propagation.REQUIRES_NEW)
 	public void updateJobHistory(JobHistory history) {
 		JobHistoryPersistence org = jobPersistenceDao.findOne(Long.valueOf(history.getId()));
 		final JobHistoryPersistence persist=PersistenceAndBeanConvert.convert(history);
 		persist.setGmtModified(new Date());
 		persist.setGmtCreate(org.getGmtCreate());
 		persist.setLog(org.getLog());
-		getTransactionTemplate().setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-		   getTransactionTemplate().execute(new TransactionCallback(){   // 使用带返回值的事务回调接口
-		    public Object doInTransaction(TransactionStatus arg0) {
-		    	return jobPersistenceDao.save(persist);
-		    	//return jobPersistenceDao.updateLog(log, Long.valueOf(id));
-		    }   
-		   });
+		jobPersistenceDao.save(persist);
 	}
 
 	@Override
@@ -77,6 +52,7 @@ public class MysqlJobHistoryManager implements JobHistoryManager{
 	
 
 	@Override
+	@Transactional(readOnly = true)
 	public JobHistory findJobHistory(String id) {
 		JobHistoryPersistence persist= jobPersistenceDao.findOne(Long.valueOf(id));
 		
@@ -91,7 +67,7 @@ public class MysqlJobHistoryManager implements JobHistoryManager{
 //		final List<Long> ids=(List<Long>) getHibernateTemplate().execute(new HibernateCallback() {
 //			public Object doInHibernate(Session session) throws HibernateException,
 //					SQLException {
-//				String sql="select max(id) as m_id,job_id  from zeus_job_history where job_id in (:idList) group by job_id";
+//				String sql="select max(id) as m_id,job_id  from dataant_job_history where job_id in (:idList) group by job_id";
 //				SQLQuery query=session.createSQLQuery(sql);
 //				query.setParameterList("idList", jobIds);
 //				List<Object[]> list= query.list();
@@ -108,7 +84,7 @@ public class MysqlJobHistoryManager implements JobHistoryManager{
 //				if(ids==null || ids.isEmpty()){
 //					return Collections.emptyList();
 //				}
-//				String sql="select id,job_id,start_time,end_time,execute_host,status,trigger_type,illustrate,operator,properties from zeus_job_history where id in (:ids)";
+//				String sql="select id,job_id,start_time,end_time,execute_host,status,trigger_type,illustrate,operator,properties from dataant_job_history where id in (:ids)";
 //				SQLQuery query=session.createSQLQuery(sql);
 //				query.setParameterList("ids", ids);
 //				List<Object[]> list= query.list();
@@ -161,7 +137,5 @@ public class MysqlJobHistoryManager implements JobHistoryManager{
 		}
 		return result;
 	}
-	@Autowired
-	JobHistoryPersistenceDao jobPersistenceDao; 
 
 }

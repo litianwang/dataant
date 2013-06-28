@@ -38,7 +38,7 @@ import com.voson.dataant.socket.worker.reqresp.WorkerHeartBeat;
 import com.voson.dataant.socket.worker.reqresp.WorkerWebCancel;
 import com.voson.dataant.socket.worker.reqresp.WorkerWebExecute;
 import com.voson.dataant.socket.worker.reqresp.WorkerWebUpdate;
-import com.voson.dataant.util.ZeusException;
+import com.voson.dataant.util.DataantException;
 
 public class ClientWorker {
 	private ClientBootstrap bootstrap;
@@ -215,22 +215,6 @@ public class ClientWorker {
 		ScheduleInfoLog.info("worker connect server success");
 	}
 
-//	public void cancelDebugJob(String debugId) {
-//		Job job = context.getDebugRunnings().get(debugId);
-//		if (job == null) {
-//			throw new RuntimeException("任务已经不存在");
-//		}
-//		job.cancel();
-//		context.getDebugRunnings().remove(debugId);
-//
-//		DebugHistory his = job.getJobContext().getDebugHistory();
-//		his.setEndTime(new Date());
-//		his.setStatus(com.voson.dataant.model.JobStatus.Status.FAILED);
-//		context.getDebugHistoryManager().updateDebugHistory(his);
-//		his.getLog().appendZeus("任务被取消");
-//		context.getDebugHistoryManager().updateDebugHistoryLog(his.getId(),
-//				his.getLog().getContent());
-//	}
 
 	public void cancelManualJob(String historyId) {
 		Job job = context.getManualRunnings().get(historyId);
@@ -241,7 +225,7 @@ public class ClientWorker {
 		his.setEndTime(new Date());
 		his.setStatus(com.voson.dataant.model.JobStatus.Status.FAILED);
 		context.getJobHistoryManager().updateJobHistory(his);
-		his.getLog().appendZeus("任务被取消");
+		his.getLog().appendDataant("任务被取消");
 		context.getJobHistoryManager().updateJobHistoryLog(his.getId(),
 				his.getLog().getContent());
 	}
@@ -255,7 +239,7 @@ public class ClientWorker {
 		his.setEndTime(new Date());
 		his.setStatus(com.voson.dataant.model.JobStatus.Status.FAILED);
 		context.getJobHistoryManager().updateJobHistory(his);
-		his.getLog().appendZeus("任务被取消");
+		his.getLog().appendDataant("任务被取消");
 		context.getJobHistoryManager().updateJobHistoryLog(his.getId(),
 				his.getLog().getContent());
 	}
@@ -278,7 +262,7 @@ public class ClientWorker {
 		WebResponse resp = new WorkerWebCancel().cancel(context, kind, id,
 				operator).get();
 		if (resp.getStatus() == Status.ERROR) {
-			throw new ZeusException(resp.getErrorText());
+			throw new DataantException(resp.getErrorText());
 		}
 	}
 

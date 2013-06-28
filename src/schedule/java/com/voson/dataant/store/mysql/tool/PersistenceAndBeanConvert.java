@@ -26,31 +26,8 @@ import com.voson.dataant.store.mysql.persistence.JobPersistence;
 import com.voson.dataant.util.Tuple;
 
 public class PersistenceAndBeanConvert {
-//
-////	public static ZeusFollow convert(ZeusFollowPersistence persist){
-////		if(persist==null){
-////			return null;
-////		}
-////		ZeusFollow zf=new ZeusFollow();
-////		zf.setId(persist.getId());
-////		zf.setUid(persist.getUid());
-////		zf.setTargetId(persist.getTargetId().toString());
-////		zf.setType(persist.getType());
-////		return zf;
-////	}
-////	
-////	public static ZeusFollowPersistence convert(ZeusFollow zf){
-////		if(zf==null){
-////			return null;
-////		}
-////		ZeusFollowPersistence persiste=new ZeusFollowPersistence();
-////		persiste.setId(zf.getId());
-////		persiste.setTargetId(Long.valueOf(zf.getTargetId()));
-////		persiste.setType(zf.getType());
-////		persiste.setUid(zf.getUid());
-////		return persiste;
-////	}
-//	
+
+
 //	public static JobPersistence convert(Tuple<JobDescriptor, JobStatus> job){
 //		if(job==null){
 //			return null;
@@ -360,39 +337,7 @@ public class PersistenceAndBeanConvert {
 //		persistence.setGmtCreate(file.getGmtCreate());
 //		persistence.setGmtModified(file.getGmtModified());
 //		return persistence;
-//	}
-//	
-//	public static DebugHistory convert(DebugHistoryPersistence persistence){
-//		DebugHistory debug=new DebugHistory();
-//		debug.setEndTime(persistence.getEndTime());
-//		debug.setExecuteHost(persistence.getExecuteHost());
-//		debug.setFileId(persistence.getFileId()==null?null:persistence.getFileId().toString());
-//		debug.setId(persistence.getId()==null?null:persistence.getId().toString());
-//		debug.setStartTime(persistence.getStartTime());
-//		debug.setStatus(Status.parser(persistence.getStatus()));
-//		debug.setGmtCreate(persistence.getGmtCreate());
-//		debug.setGmtModified(persistence.getGmtModified());
-//		debug.setScript(persistence.getScript());
-//		debug.setJobRunType(JobRunType.parser(persistence.getRuntype()));
-//		debug.setLog(persistence.getLog());
-//		return debug;
-//	}
-//	public static DebugHistoryPersistence convert(DebugHistory debug){
-//		DebugHistoryPersistence persist=new DebugHistoryPersistence();
-//		persist.setEndTime(debug.getEndTime());
-//		persist.setExecuteHost(debug.getExecuteHost());
-//		persist.setFileId(debug.getFileId()==null?null:Long.valueOf(debug.getFileId()));
-//		persist.setId(debug.getId()==null?null:Long.valueOf(debug.getId()));
-//		persist.setStartTime(debug.getStartTime());
-//		persist.setStatus(debug.getStatus()==null?null:debug.getStatus().toString());
-//		persist.setGmtCreate(debug.getGmtCreate());
-//		persist.setGmtModified(debug.getGmtModified());
-//		persist.setScript(debug.getScript());
-//		persist.setRuntype(debug.getJobRunType()==null?null:debug.getJobRunType().toString());
-//		persist.setLog(debug.getLog().getContent());
-//		return persist;
-//	}
-//	
+//	}	
 //	public static ProfilePersistence convert(Profile p){
 //		if(p==null){
 //			return null;

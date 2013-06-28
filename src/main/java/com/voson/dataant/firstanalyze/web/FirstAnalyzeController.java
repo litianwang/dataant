@@ -38,7 +38,7 @@ import com.voson.dataant.firstanalyze.service.FirstAnalyzeService;
 @RequestMapping(value = "/firstanalyze")
 public class FirstAnalyzeController {
 
-	private static final int PAGE_SIZE = 3;
+	private static final int PAGE_SIZE = 10;
 
 	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
 	static {

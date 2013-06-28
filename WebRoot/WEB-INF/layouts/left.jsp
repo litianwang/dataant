@@ -14,6 +14,14 @@
 	</div>
 	<h1>调度中心</h1>
 	<div class="submenu">
-		<a id="searchapp-tab"href="${ctx}/group">分组管理</a>
+		<a id="sch-group-tab"href="${ctx}/group">分组管理</a>
+		<a id="sch-job-tab"href="${ctx}/job">作业管理</a>
+		<a id="sch-jobhistory-tab"href="${ctx}/jobhistory">作业日志</a>
+	</div>
+	<h1>UI组件参考</h1>
+	<div class="submenu">
+		<a id="bootstrap-tab" target="_blank" href="http://www.bootcss.com/">Bootstrap</a>
+		<a id="ligerui-tab" target="_blank" href="http://www.ligerui.com/">LigerUI</a>
+		
 	</div>
 </div>
