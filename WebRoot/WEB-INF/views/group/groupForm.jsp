@@ -12,28 +12,39 @@
 			$("#dataantgroup_title").focus();
 			//为inputForm注册validate函数
 			$("#inputForm").validate();
+			alert('${treeJson}');
 		});
         function f_open2()
         {
-            $.ligerDialog.open({ url: '../../welcome.htm', height: 300, width: null, buttons: [
-                { text: '确定', onclick: function (item, dialog) { 
-                    	alert(item.text); 
-                    } },
-                { text: '取消', onclick: function (item, dialog) { dialog.close(); } }
-             ], isResize: true
+            $.ligerDialog.open({ url: '${ctx}/group/add/parent/${dataantGroup.id}', 
+            	title:'添加组',
+                height: 300, 
+                width: 500, 
+                buttons: [
+                          { text: '确定', onclick: function (item, dialog) {
+                              	// 
+								dialog.frame.submitForm(dialog);
+                              }
+                          },
+                          { text: '取消', onclick: function (item, dialog) { dialog.close(); } }
+                       ],
+                isResize: true
             });
         }
 	</script>
 </head>
 
 <body>
+	<c:if test="${not empty message}">
+		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
+	</c:if>
 	<form id="inputForm" action="${ctx}/group/${action}" method="post" class="form-horizontal">
 		<fieldset>
 			<div class="form-actions">
 				<input id="submit_btn" class="btn btn-primary" type="submit" value="保存"/>&nbsp;
 				<c:if test="${!(empty dataantGroup.id)}">
 					<c:if test="${dataantGroup.directory eq '0'}">
-						<a class="btn btn-success" href="${ctx}/group/create/parent/${dataantGroup.id}"><i class="icon-folder-close icon-white"></i>添加组</a>&nbsp;	
+						<a class="btn btn-success" href="#" onclick="f_open2()"><i class="icon-folder-close icon-white"></i>添加组</a>&nbsp;	
 					</c:if>
 					<c:if test="${dataantGroup.directory eq '1'}">
 						<a class="btn btn-success" href="${ctx}/job/create/group/${dataantGroup.id}"><i class="icon-file icon-white"></i>添加任务</a>&nbsp;	

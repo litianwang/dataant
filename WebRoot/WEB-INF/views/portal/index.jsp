@@ -22,6 +22,7 @@
             var tab = null;
             var accordion = null;
             var tree = null;
+            var treeJson = [${treeJson}];
             $(function ()
             {
 
@@ -45,7 +46,7 @@
                 });
                 //树
                 $("#tree1").ligerTree({
-                    data : [${treeJson}],
+                    data : treeJson,
                     checkbox: false,
                     slide: false,
                     nodeWidth: 120,

@@ -1,12 +1,14 @@
 package com.voson.dataant.secedule.web;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -18,12 +20,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
 import com.google.common.collect.Maps;
 import com.voson.dataant.common.web.DateConvertEditor;
 import com.voson.dataant.secedule.service.GroupService;
+import com.voson.dataant.store.GroupBean;
+import com.voson.dataant.store.JobBean;
+import com.voson.dataant.store.mysql.MysqlGroupManager;
 import com.voson.dataant.store.mysql.persistence.GroupPersistence;
 
 /**
@@ -41,6 +47,11 @@ import com.voson.dataant.store.mysql.persistence.GroupPersistence;
 @Controller
 @RequestMapping(value = "/group")
 public class GroupController {
+	
+
+	
+	@Autowired
+	private MysqlGroupManager mysqlGroupManager;
 
 	private static final int PAGE_SIZE = 10;
 
@@ -76,20 +87,43 @@ public class GroupController {
 		return "group/groupList";
 	}
 
-	@RequestMapping(value = "create", method = RequestMethod.GET)
-	public String createForm(Model model) {
-		model.addAttribute("dataantGroup", new GroupPersistence());
-		model.addAttribute("action", "create");
-		return "group/groupForm";
+//	@RequestMapping(value = "create", method = RequestMethod.GET)
+//	public String createForm(Model model) {
+//		model.addAttribute("dataantGroup", new GroupPersistence());
+//		model.addAttribute("action", "create");
+//		return "group/groupForm";
+//	}
+//
+//	@RequestMapping(value = "create", method = RequestMethod.POST)
+//	public String create(@Valid GroupPersistence newDataantGroup, RedirectAttributes redirectAttributes) {
+//		// newDataantGroup.setInsertTime(new Date());
+//		groupService.saveDataantGroup(newDataantGroup);
+//		redirectAttributes.addFlashAttribute("message", "创建任务成功");
+//		return "redirect:/group/";
+//	}
+	
+	@RequestMapping(value = "add/parent/{parent}", method = RequestMethod.GET)
+	public String addForm(@PathVariable("parent") Integer parent,Model model) {
+		GroupPersistence dataantGroup = new GroupPersistence();
+		dataantGroup.setParent(parent);
+		model.addAttribute("dataantGroup", dataantGroup);
+		model.addAttribute("action", "add");
+		return "group/add-groupForm";
 	}
 
-	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid GroupPersistence newDataantGroup, RedirectAttributes redirectAttributes) {
-		// newDataantGroup.setInsertTime(new Date());
+	@RequestMapping(value = "add", method = RequestMethod.POST)
+	@ResponseBody
+	public String add(@Valid GroupPersistence newDataantGroup, RedirectAttributes redirectAttributes) {
+		this.buildGroupPersistence(newDataantGroup);
 		groupService.saveDataantGroup(newDataantGroup);
-		redirectAttributes.addFlashAttribute("message", "创建任务成功");
-		return "redirect:/group/";
+		redirectAttributes.addFlashAttribute("message", "创建组成功");
+		String rootId = mysqlGroupManager.getRootGroupId();
+		GroupBean root = mysqlGroupManager.getDownstreamGroupBean(rootId);
+		String treeJson = this.buildGroupTree(root);
+		redirectAttributes.addFlashAttribute("treeJson", treeJson);
+		return treeJson;
 	}
+	
 
 	@RequestMapping(value = "update/{id}", method = RequestMethod.GET)
 	public String updateForm(@PathVariable("id") Integer id, Model model) {
@@ -100,6 +134,7 @@ public class GroupController {
 
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid @ModelAttribute("preloadDataantGroup") GroupPersistence dataantGroup, RedirectAttributes redirectAttributes) {
+		this.buildGroupPersistence(dataantGroup);
 		groupService.saveDataantGroup(dataantGroup);
 		redirectAttributes.addFlashAttribute("message", "更新任务成功");
 		return "redirect:/group/update/" + dataantGroup.getId();
@@ -122,5 +157,47 @@ public class GroupController {
 			return groupService.getDataantGroup(id);
 		}
 		return null;
+	}
+	
+	public GroupPersistence buildGroupPersistence(GroupPersistence newGroup){
+		if(StringUtils.isBlank(newGroup.getConfigs())){
+			newGroup.setConfigs("{}");
+		}
+		if(StringUtils.isBlank(newGroup.getResources())){
+			newGroup.setResources("[]");
+		}
+		if(StringUtils.isBlank(newGroup.getOwner())){
+			newGroup.setOwner("litianwang");
+		}
+		return newGroup;
+	}
+	
+	private String buildGroupTree(GroupBean group){
+		String tree = "{ url:'group/update/" + group.getGroupDescriptor().getId() 
+					+ "', text:'" + group.getGroupDescriptor().getName() 
+					+ "',isexpand:false";
+		String child = "";
+		List<GroupBean> childGroups  = group.getChildrenGroupBeans();
+		if(null != childGroups ){
+			for (GroupBean childGroup : childGroups) {
+				child += this.buildGroupTree(childGroup) + ",";
+			}
+		}
+		if(StringUtils.isNotBlank(child)){
+			child = child.substring(0,child.lastIndexOf(","));
+			tree += ",children: [" + child + "]";
+		}
+		String job = "";
+		Map<String, JobBean> jobBeanMap = group.getJobBeans();
+		for (String key : jobBeanMap.keySet()) {
+			JobBean jobBean = jobBeanMap.get(key);
+			job += "{url:'job/update/"+ jobBean.getJobDescriptor().getId() +"',text:'"+jobBean.getJobDescriptor().getName()+"'},";
+		}
+		if(StringUtils.isNotBlank(job)){
+			job = job.substring(0,job.lastIndexOf(","));
+			tree += ",children: [" + job + "]";
+		}
+		tree+="}";
+		return tree;
 	}
 }
