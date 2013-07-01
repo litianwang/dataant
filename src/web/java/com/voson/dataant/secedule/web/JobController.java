@@ -86,10 +86,19 @@ public class JobController {
 
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid JobPersistence newJob, RedirectAttributes redirectAttributes) {
-		// newJob.setInsertTime(new Date());
+		buildJobPersistence(newJob);
 		jobService.saveJob(newJob);
 		redirectAttributes.addFlashAttribute("message", "创建任务成功");
 		return "redirect:/job/";
+	}
+	
+	@RequestMapping(value = "create/group/{groupId}", method = RequestMethod.GET)
+	public String createInGroupFrom(@PathVariable("groupId") Integer groupId, Model model) {
+		JobPersistence newJob = new JobPersistence();
+		newJob.setGroupId(groupId);
+		model.addAttribute("job", newJob);
+		model.addAttribute("action", "create");
+		return "job/jobForm";
 	}
 
 	@RequestMapping(value = "update/{id}", method = RequestMethod.GET)
@@ -101,9 +110,10 @@ public class JobController {
 
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	public String update(@Valid @ModelAttribute("preloadJob") JobPersistence job, RedirectAttributes redirectAttributes) {
+		buildJobPersistence(job);
 		jobService.saveJob(job);
 		redirectAttributes.addFlashAttribute("message", "更新任务成功");
-		return "redirect:/job/";
+		return "redirect:/job/update/"+job.getId();
 	}
 
 	@RequestMapping(value = "delete/{id}")
@@ -114,9 +124,16 @@ public class JobController {
 	}
 	
 	@RequestMapping(value = "run/{id}/{type}", method = RequestMethod.GET)
-	public String run(@PathVariable("id") String id, @PathVariable("type")int type) throws Exception {
+	public String run(@PathVariable("id") String id, @PathVariable("type")int type, RedirectAttributes redirectAttributes) throws Exception {
 		jobService.runJob(id, type);
-		return "redirect:/job/";
+		redirectAttributes.addFlashAttribute("message", "手动运行作业开始");
+		return "redirect:/job/update/"+id;
+	}
+	@RequestMapping(value = "switch/{id}/{auto}", method = RequestMethod.GET)
+	public String switchAuto(@PathVariable("id") String id, @PathVariable("auto")Boolean auto, RedirectAttributes redirectAttributes) throws Exception {
+		jobService.swtichAuto(id, auto);
+		redirectAttributes.addFlashAttribute("message", "开启/关闭  自动调度  成功");
+		return "redirect:/job/update/"+id;
 	}
 	
 	public JobPersistence buildJobPersistence(JobPersistence newJob){

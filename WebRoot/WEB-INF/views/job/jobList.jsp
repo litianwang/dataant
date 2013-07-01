@@ -19,9 +19,10 @@
 		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 	</c:if>
 	<div class="row">
-		<div class="span4 offset7">
+		<div class="span8 offset3">
 			<form class="form-search" action="#">
-				<label>名称：</label> <input type="text" name="search_LIKE_title" class="input-medium" value="${param.search_LIKE_title}"> 
+				<label>组ID：</label> <input type="text" name="search_EQ_groupId" class="input-medium" value="${param.search_EQ_groupId}"> 
+				<label>名称：</label> <input type="text" name="search_LIKE_name" class="input-medium" value="${param.search_LIKE_name}"> 
 				<button type="submit" class="btn" id="search_btn">Search</button>
 		    </form>
 	    </div>

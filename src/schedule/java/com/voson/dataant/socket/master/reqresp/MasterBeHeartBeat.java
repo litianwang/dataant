@@ -20,7 +20,6 @@ public class MasterBeHeartBeat {
 			hbm = HeartBeatMessage.newBuilder().mergeFrom(request.getBody()).build();
 			newbeat.memRate=hbm.getMemRate();
 			newbeat.runnings=hbm.getRunningsList();
-			newbeat.debugRunnings=hbm.getDebugRunningsList();
 			newbeat.manualRunnings=hbm.getManualRunningsList();
 			newbeat.timestamp=new Date(hbm.getTimestamp());
 			if(worker.heart==null || newbeat.timestamp.getTime()>worker.heart.timestamp.getTime()){

@@ -1,6 +1,5 @@
 package com.voson.dataant.socket.worker.reqresp;
 
-import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
@@ -20,9 +19,7 @@ public class WorkerBeCancel {
 	public Future<Response> execute(final WorkerContext context,final Request req){
 		try {
 			CancelMessage cm=CancelMessage.newBuilder().mergeFrom(req.getBody()).build();
-			if(cm.getEk()==ExecuteKind.DebugKind){
-				////return cancelDebug(context, req,cm.getId());
-			}else if(cm.getEk()==ExecuteKind.ManualKind){
+			if(cm.getEk()==ExecuteKind.ManualKind){
 				return cancelManual(context, req, cm.getId());
 			}else if(cm.getEk()==ExecuteKind.ScheduleKind){
 				return cancelSchedule(context, req,cm.getId());

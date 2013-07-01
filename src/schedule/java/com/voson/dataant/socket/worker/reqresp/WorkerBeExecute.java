@@ -26,9 +26,7 @@ import com.voson.dataant.util.JobUtils;
 public class WorkerBeExecute {
 	public Future<Response> execute(final WorkerContext context,
 			final Request req) {
-		if (req.getOperate() == Operate.Debug) {
-			////return debug(context, req);
-		} else if (req.getOperate() == Operate.Manual) {
+		if (req.getOperate() == Operate.Manual) {
 			return manual(context, req);
 		} else if (req.getOperate() == Operate.Schedule) {
 			return schedule(context, req);

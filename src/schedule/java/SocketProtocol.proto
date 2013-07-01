@@ -15,7 +15,6 @@ enum Status { //相应状态
 enum ExecuteKind{
 	ScheduleKind=0;
 	ManualKind=1;
-	DebugKind=2;
 }
 message SocketMessage{
 	enum Kind{
@@ -33,7 +32,6 @@ enum WebOperate{
 	UpdateJob=1;//更新job
 	ExecuteJob=2;//手动执行或者手动恢复job
 	CancelJob=3;//手动取消任务
-	ExecuteDebug=4;//调试任务
 }
 message WebRequest{
 	enum Trigger{
@@ -43,7 +41,7 @@ message WebRequest{
 	required sint32 rid=1;
 	required WebOperate operate=2;
 	required ExecuteKind ek=3;
-	required string id=4;// update 时 id=jobId  source=ScheduleJob时 id=historyId  source=DebugJob时id=debugId
+	required string id=4;// update 时 id=jobId  source=ScheduleJob时 id=historyId
 	optional string executor=5;
 	optional bytes body=6;
 }
@@ -59,8 +57,7 @@ enum Operate{
 	HeartBeat=0;//心跳 worker->server
 	Schedule=1;//调度执行命令 server->worker
 	Cancel=2;//取消命令 server->worker
-	Debug=3;//调试命令 server->worker
-	Manual=4;//手动执行命令
+	Manual=3;//手动执行命令
 }
 
 //request
@@ -82,10 +79,9 @@ message Response {
 
 message HeartBeatMessage{
 	repeated string runnings=1;//正在运行的job
-	repeated string debugRunnings=2;
-	repeated string manualRunnings=3;
-	optional int64 timestamp=4;//时间戳
-	optional float mem_rate=5;//内存占用比例
+	repeated string manualRunnings=2;
+	optional int64 timestamp=3;//时间戳
+	optional float mem_rate=4;//内存占用比例
 }
 message ExecuteMessage{
 	required string jobId=1;
@@ -94,10 +90,6 @@ message ExecuteMessage{
 message CancelMessage{
 	required ExecuteKind ek=1;
 	required string id=2;
-}
-message DebugMessage{
-	required string debugId=1;
-	optional sint32 exitCode=2;
 }
 message ManualMessage{
 	required string historyId=1;

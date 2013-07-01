@@ -21,17 +21,6 @@ public class MasterBeWebExecute {
 				.setStatus(Status.OK).build();
 			SocketLog.info("send web execute response,rid="+req.getRid()+",jobId="+jobId);
 			return resp;
-		}else if(req.getEk()==ExecuteKind.DebugKind){
-			String debugId=req.getId();
-			////DebugHistory history=context.getDebugHistoryManager().findDebugHistory(debugId);
-			SocketLog.info("receive web debug request,rid="+req.getRid()+",debugId="+debugId);
-			
-			////context.getMaster().debug(history);
-			
-			WebResponse resp=WebResponse.newBuilder().setRid(req.getRid()).setOperate(WebOperate.ExecuteJob)
-				.setStatus(Status.OK).build();
-			SocketLog.info("send web debug response,rid="+req.getRid()+",debugId="+debugId);
-			return resp;
 		}
 		return null;
 	}

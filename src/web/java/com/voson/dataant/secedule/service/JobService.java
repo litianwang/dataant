@@ -1,4 +1,5 @@
 package com.voson.dataant.secedule.service;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -117,6 +118,26 @@ public class JobService {
 		}
 		try {
 			worker.executeJobFromWeb(kind, history.getId());
+		} catch (Exception e) {
+			log.error("error",e);
+			throw new Exception(e.getMessage());
+		}
+	
+	}
+	
+	/**
+	 * 开关
+	 * @param jobId
+	 * @param auto
+	 * @throws Exception
+	 */
+	public void swtichAuto(String jobId, Boolean auto) throws Exception{
+		JobPersistence jobPersistence = jobPersistenceDao.findOne(Long.valueOf(jobId));
+		jobPersistence.setAuto(auto?1:0);
+		jobPersistence.setGmtModified(new Date());
+		this.saveJob(jobPersistence);
+		try {
+			worker.updateJobFromWeb(jobId);
 		} catch (Exception e) {
 			log.error("error",e);
 			throw new Exception(e.getMessage());

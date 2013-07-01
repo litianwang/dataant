@@ -29,8 +29,6 @@ public class MasterBeWebCancel {
 			return processScheduleCancel(context, req);
 		} else if (req.getEk() == ExecuteKind.ManualKind) {
 			return processManualCancel(context, req);
-		} else if (req.getEk() == ExecuteKind.DebugKind) {
-			//return processDebugCancel(context, req);
 		}
 		return null;
 	}

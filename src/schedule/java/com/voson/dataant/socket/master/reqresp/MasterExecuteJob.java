@@ -10,7 +10,6 @@ import com.voson.dataant.socket.master.AtomicIncrease;
 import com.voson.dataant.socket.master.MasterContext;
 import com.voson.dataant.socket.master.MasterWorkerHolder;
 import com.voson.dataant.socket.master.MasterHandler.ResponseListener;
-import com.voson.dataant.socket.protocol.Protocol.DebugMessage;
 import com.voson.dataant.socket.protocol.Protocol.ExecuteKind;
 import com.voson.dataant.socket.protocol.Protocol.ExecuteMessage;
 import com.voson.dataant.socket.protocol.Protocol.ManualMessage;
@@ -33,8 +32,6 @@ public class MasterExecuteJob {
 			return processManual(context, holder, id);
 		}else if(ek==ExecuteKind.ScheduleKind){
 			return processSchedule(context, holder, id);
-		}else if(ek==ExecuteKind.DebugKind){
-			return processDebug(context, holder, id);
 		}
 		return null;
 	}
@@ -111,42 +108,6 @@ public class MasterExecuteJob {
 		});
 		holder.getChannel().write(sm);
 		SocketLog.info("master send manual command to worker,rid="+req.getRid()+",historyId="+historyId);
-		return f;
-	}
-	private Future<Response> processDebug(final MasterContext context,final MasterWorkerHolder holder,final String id){
-		// 向channel 发送执行job命令
-		// 等待worker响应
-		// 响应OK 则添加监听器，继续等待任务完成的消息
-		// 响应失败，返回失败退出码
-		holder.getDebugRunnings().put(id,false);
-		DebugMessage dm=DebugMessage.newBuilder().setDebugId(id).build();
-		final Request req=Request.newBuilder().setRid(AtomicIncrease.getAndIncrement()).setOperate(Operate.Debug)
-			.setBody(dm.toByteString()).build();
-		SocketMessage sm=SocketMessage.newBuilder().setKind(Kind.REQUEST).setBody(req.toByteString()).build();
-		Future<Response> f=context.getThreadPool().submit(new Callable<Response>() {
-			private Response response;
-			public Response call() throws Exception {
-				final CountDownLatch latch=new CountDownLatch(1);
-				context.getHandler().addListener(new ResponseListener() {
-					public void onWebResponse(WebResponse resp) {}
-					public void onResponse(Response resp) {
-						if(resp.getRid()==req.getRid()){
-							context.getHandler().removeListener(this);
-							response=resp;
-							latch.countDown();
-						}
-					}
-				});
-				try {
-					latch.await();
-				} finally{
-					holder.getDebugRunnings().remove(id);
-				}
-				return response;
-			}
-		});
-		holder.getChannel().write(sm);
-		SocketLog.info("master send debug command to worker,rid="+req.getRid()+",debugId="+id);
 		return f;
 	}
 }

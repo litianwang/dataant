@@ -4,8 +4,8 @@
 
 <html>
 <head>
-	<title>任务管理</title>
-	
+	<title>组管理</title>
+	<%@include file="/common/meta.jsp"%>
 	<script>
 		$(document).ready(function() {
 			//聚焦第一个输入框
@@ -13,73 +13,93 @@
 			//为inputForm注册validate函数
 			$("#inputForm").validate();
 		});
+        function f_open2()
+        {
+            $.ligerDialog.open({ url: '../../welcome.htm', height: 300, width: null, buttons: [
+                { text: '确定', onclick: function (item, dialog) { 
+                    	alert(item.text); 
+                    } },
+                { text: '取消', onclick: function (item, dialog) { dialog.close(); } }
+             ], isResize: true
+            });
+        }
 	</script>
 </head>
 
 <body>
-	<form id="inputForm" action="${ctx}/dataantgroup/${action}" method="post" class="form-horizontal">
-		<input type="hidden" name="id" value="${dataantGroup.id}"/>
+	<form id="inputForm" action="${ctx}/group/${action}" method="post" class="form-horizontal">
 		<fieldset>
-			<legend><small>管理任务</small></legend>
+			<div class="form-actions">
+				<input id="submit_btn" class="btn btn-primary" type="submit" value="保存"/>&nbsp;
+				<c:if test="${!(empty dataantGroup.id)}">
+					<c:if test="${dataantGroup.directory eq '0'}">
+						<a class="btn btn-success" href="${ctx}/group/create/parent/${dataantGroup.id}"><i class="icon-folder-close icon-white"></i>添加组</a>&nbsp;	
+					</c:if>
+					<c:if test="${dataantGroup.directory eq '1'}">
+						<a class="btn btn-success" href="${ctx}/job/create/group/${dataantGroup.id}"><i class="icon-file icon-white"></i>添加任务</a>&nbsp;	
+					</c:if>
+				</c:if>
+				<input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
+			</div>
 			<div class="control-group">
-				<label for="description" class="control-label">ID:</label>
-				<div class="controls">
-					<textarea id="id" name="id" class="input-large">${dataantGroup.id}</textarea>
-				</div>
+				<label for="id" class="control-label">ID:</label>
+					<div class="controls">
+						<input id="id" name="id" class="input-large" value="${dataantGroup.id}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">配置项:</label>
-				<div class="controls">
-					<textarea id="configs" name="configs" class="input-large">${dataantGroup.configs}</textarea>
-				</div>
+				<label for="configs" class="control-label">配置项:</label>
+					<div class="controls">
+						<input id="configs" name="configs" class="input-xlarge" value="${dataantGroup.configs}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">描述:</label>
-				<div class="controls">
-					<textarea id="descr" name="descr" class="input-large">${dataantGroup.descr}</textarea>
-				</div>
+				<label for="descr" class="control-label">描述:</label>
+					<div class="controls">
+						<input id="descr" name="descr" class="input-xlarge" value="${dataantGroup.descr}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">目录:</label>
-				<div class="controls">
-					<textarea id="directory" name="directory" class="input-large">${dataantGroup.directory}</textarea>
-				</div>
+				<label for="directory" class="control-label">目录:</label>
+					<div class="controls">
+						<input id="directory" name="directory" class="input-large" value="${dataantGroup.directory}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">创建时间:</label>
-				<div class="controls">
-					<textarea id="gmtCreate" name="gmtCreate" class="input-large">${dataantGroup.gmtCreate}</textarea>
-				</div>
+				<label for="gmtCreate" class="control-label">创建时间:</label>
+					<div class="controls">
+						<input id="gmtCreate" name="gmtCreate" class="input-large" value="${dataantGroup.gmtCreate}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">修改时间:</label>
-				<div class="controls">
-					<textarea id="gmtModified" name="gmtModified" class="input-large">${dataantGroup.gmtModified}</textarea>
-				</div>
+				<label for="gmtModified" class="control-label">修改时间:</label>
+					<div class="controls">
+						<input id="gmtModified" name="gmtModified" class="input-large" value="${dataantGroup.gmtModified}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">名称:</label>
-				<div class="controls">
-					<textarea id="name" name="name" class="input-large">${dataantGroup.name}</textarea>
-				</div>
+				<label for="name" class="control-label">名称:</label>
+					<div class="controls">
+						<input id="name" name="name" class="input-xlarge" value="${dataantGroup.name}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">管理员:</label>
-				<div class="controls">
-					<textarea id="owner" name="owner" class="input-large">${dataantGroup.owner}</textarea>
-				</div>
+				<label for="owner" class="control-label">管理员:</label>
+					<div class="controls">
+						<input id="owner" name="owner" class="input-xlarge" value="${dataantGroup.owner}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">父组:</label>
-				<div class="controls">
-					<textarea id="parent" name="parent" class="input-large">${dataantGroup.parent}</textarea>
-				</div>
+				<label for="parent" class="control-label">父组:</label>
+					<div class="controls">
+						<input id="parent" name="parent" class="input-large" value="${dataantGroup.parent}"/>
+					</div>
 			</div>	
 			<div class="control-group">
-				<label for="description" class="control-label">资源项:</label>
-				<div class="controls">
-					<textarea id="resources" name="resources" class="input-large">${dataantGroup.resources}</textarea>
-				</div>
+				<label for="resources" class="control-label">资源项:</label>
+					<div class="controls">
+						<input id="resources" name="resources" class="input-xlarge" value="${dataantGroup.resources}"/>
+					</div>
 			</div>	
 			<div class="form-actions">
 				<input id="submit_btn" class="btn btn-primary" type="submit" value="提交"/>&nbsp;	

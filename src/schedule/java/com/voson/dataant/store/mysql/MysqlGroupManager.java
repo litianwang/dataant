@@ -29,7 +29,6 @@ import com.voson.dataant.store.mysql.persistence.dao.JobPersistenceDao;
 import com.voson.dataant.store.mysql.tool.PersistenceAndBeanConvert;
 import com.voson.dataant.util.Tuple;
 import com.voson.dataant.util.DataantException;
-@SuppressWarnings("unchecked")
 public class MysqlGroupManager implements GroupManager{
 	
 
@@ -112,7 +111,7 @@ public class MysqlGroupManager implements GroupManager{
 	@Override
 	public List<Tuple<JobDescriptor, JobStatus>> getChildrenJob(String groupId){
 		// List<JobPersistence> list=getHibernateTemplate().find("from com.voson.hornet.store.mysql.persistence.JobPersistence where groupId="+groupId);
-		List<JobPersistence> list = JobPersistenceDao.findByGroupId(Long.valueOf(groupId));
+		List<JobPersistence> list = JobPersistenceDao.findByGroupId(Integer.valueOf(groupId));
 		List<Tuple<JobDescriptor, JobStatus>> result=new ArrayList<Tuple<JobDescriptor, JobStatus>>();
 		if(list!=null){
 			for(JobPersistence j:list){

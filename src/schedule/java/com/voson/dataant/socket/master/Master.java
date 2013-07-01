@@ -18,9 +18,10 @@ import com.voson.dataant.model.JobDescriptor;
 import com.voson.dataant.model.JobHistory;
 import com.voson.dataant.model.JobStatus;
 import com.voson.dataant.model.JobStatus.TriggerType;
+import com.voson.dataant.schedule.mvc.AddJobListener;
+import com.voson.dataant.schedule.mvc.DataantJobException;
 import com.voson.dataant.schedule.mvc.JobController;
 import com.voson.dataant.schedule.mvc.ScheduleInfoLog;
-import com.voson.dataant.schedule.mvc.DataantJobException;
 import com.voson.dataant.schedule.mvc.event.Events;
 import com.voson.dataant.schedule.mvc.event.JobFailedEvent;
 import com.voson.dataant.schedule.mvc.event.JobSuccessEvent;
@@ -48,8 +49,8 @@ public class Master {
 //			context.getDispatcher().addDispatcherListener(
 //					new StopScheduleJobListener());
 //		}
-//		context.getDispatcher().addDispatcherListener(
-//				new AddJobListener(context, this));
+		context.getDispatcher().addDispatcherListener(
+				new AddJobListener(context, this));
 //		context.getDispatcher().addDispatcherListener(
 //				new JobFailListener(context));
 //		context.getDispatcher().addDispatcherListener(
@@ -129,61 +130,6 @@ public class Master {
 		// 检测任务超时
 		checkTimeOver();
 	}
-
-//	private void runDebugJob(MasterWorkerHolder selectWorker) {
-//		final MasterWorkerHolder w = selectWorker;
-//		final String debugId = context.getDebugQueue().poll();
-//		SocketLog.info("master scan and poll debugId=" + debugId + " and run!");
-//
-//		new Thread() {
-//			@Override
-//			public void run() {
-//				DebugHistory history = context.getDebugHistoryManager()
-//						.findDebugHistory(debugId);
-//				history.getLog().appendDataant(
-//						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-//								.format(new Date()) + " 开始运行");
-//				context.getDebugHistoryManager().updateDebugHistoryLog(debugId,
-//						history.getLog().getContent());
-//				Exception exception = null;
-//				Response resp = null;
-//				try {
-//					Future<Response> f = new MasterExecuteJob().executeJob(
-//							context, w, ExecuteKind.DebugKind, debugId);
-//					resp = f.get();
-//				} catch (Exception e) {
-//					exception = e;
-//					DebugInfoLog.error(
-//							String.format("debugId:%s run failed", debugId), e);
-//				}
-//				boolean success = resp.getStatus() == Status.OK ? true : false;
-//
-//				if (!success) {
-//					// 运行失败，更新失败状态，发出失败消息
-//					if (exception != null) {
-//						exception = new DataantException(String.format(
-//								"fileId:%s run failed ", history.getFileId()),
-//								exception);
-//					} else {
-//						exception = new DataantException(String.format(
-//								"fileId:%s run failed ", history.getFileId()));
-//					}
-//					DebugInfoLog.info("debugId:" + debugId + " run fail ");
-//					history = context.getDebugHistoryManager()
-//							.findDebugHistory(debugId);
-//					DebugFailEvent jfe = new DebugFailEvent(
-//							history.getFileId(), history, exception);
-//					context.getDispatcher().forwardEvent(jfe);
-//				} else {
-//					// 运行成功，发出成功消息
-//					DebugInfoLog.info("debugId:" + debugId + " run success");
-//					DebugSuccessEvent dse = new DebugSuccessEvent(
-//							history.getFileId(), history);
-//					context.getDispatcher().forwardEvent(dse);
-//				}
-//			}
-//		}.start();
-//	}
 
 	private void runManualJob(MasterWorkerHolder selectWorker) {
 		final MasterWorkerHolder w = selectWorker;
@@ -444,7 +390,7 @@ public class Master {
 //		SMSAlarm smsAlarm = (SMSAlarm) context.getApplicationContext().getBean(
 //				"smsAlarm");
 //
-//		final StringBuffer title = new StringBuffer("宙斯任务超时[");
+//		final StringBuffer title = new StringBuffer("DataAnt任务超时[");
 //		switch (type) {
 //		case 0:
 //			title.append("自动调度").append("] jobID=").append(his.getJobId());
@@ -535,18 +481,6 @@ public class Master {
 
 		}
 	}
-
-//	public void debug(DebugHistory debug) {
-//		debug.setStatus(com.voson.dataant.model.JobStatus.Status.RUNNING);
-//		debug.setStartTime(new Date());
-//		context.getDebugHistoryManager().updateDebugHistory(debug);
-//		debug.getLog().appendDataant(
-//				new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
-//						+ " 进入任务队列");
-//		context.getDebugHistoryManager().updateDebugHistoryLog(debug.getId(),
-//				debug.getLog().getContent());
-//		context.getDebugQueue().offer(debug.getId());
-//	}
 
 	public JobHistory run(JobHistory history) {
 		history.setStatus(com.voson.dataant.model.JobStatus.Status.RUNNING);

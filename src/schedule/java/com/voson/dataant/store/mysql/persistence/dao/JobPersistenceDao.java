@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.voson.dataant.store.mysql.persistence.JobPersistence;
@@ -12,7 +11,7 @@ public interface JobPersistenceDao  extends PagingAndSortingRepository<JobPersis
 	/**
 	 * @return
 	 */
-	public List<JobPersistence> findByGroupId(Long groupId); 
+	public List<JobPersistence> findByGroupId(Integer groupId); 
 	
 
 	public List<JobPersistence> findByIdIn(Collection<Long> IdList); 

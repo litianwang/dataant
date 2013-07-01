@@ -79,7 +79,6 @@ public final class Protocol {
       implements com.google.protobuf.ProtocolMessageEnum {
     ScheduleKind(0, 0),
     ManualKind(1, 1),
-    DebugKind(2, 2),
     ;
     
     
@@ -89,7 +88,6 @@ public final class Protocol {
       switch (value) {
         case 0: return ScheduleKind;
         case 1: return ManualKind;
-        case 2: return DebugKind;
         default: return null;
       }
     }
@@ -120,7 +118,7 @@ public final class Protocol {
     }
     
     private static final ExecuteKind[] VALUES = {
-      ScheduleKind, ManualKind, DebugKind, 
+      ScheduleKind, ManualKind, 
     };
     public static ExecuteKind valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -149,7 +147,6 @@ public final class Protocol {
     UpdateJob(0, 1),
     ExecuteJob(1, 2),
     CancelJob(2, 3),
-    ExecuteDebug(3, 4),
     ;
     
     
@@ -160,7 +157,6 @@ public final class Protocol {
         case 1: return UpdateJob;
         case 2: return ExecuteJob;
         case 3: return CancelJob;
-        case 4: return ExecuteDebug;
         default: return null;
       }
     }
@@ -191,7 +187,7 @@ public final class Protocol {
     }
     
     private static final WebOperate[] VALUES = {
-      UpdateJob, ExecuteJob, CancelJob, ExecuteDebug, 
+      UpdateJob, ExecuteJob, CancelJob, 
     };
     public static WebOperate valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -220,8 +216,7 @@ public final class Protocol {
     HeartBeat(0, 0),
     Schedule(1, 1),
     Cancel(2, 2),
-    Debug(3, 3),
-    Manual(4, 4),
+    Manual(3, 3),
     ;
     
     
@@ -232,8 +227,7 @@ public final class Protocol {
         case 0: return HeartBeat;
         case 1: return Schedule;
         case 2: return Cancel;
-        case 3: return Debug;
-        case 4: return Manual;
+        case 3: return Manual;
         default: return null;
       }
     }
@@ -264,7 +258,7 @@ public final class Protocol {
     }
     
     private static final Operate[] VALUES = {
-      HeartBeat, Schedule, Cancel, Debug, Manual, 
+      HeartBeat, Schedule, Cancel, Manual, 
     };
     public static Operate valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -2629,20 +2623,8 @@ public final class Protocol {
       return runnings_.get(index);
     }
     
-    // repeated string debugRunnings = 2;
-    public static final int DEBUGRUNNINGS_FIELD_NUMBER = 2;
-    private java.util.List<java.lang.String> debugRunnings_ =
-      java.util.Collections.emptyList();
-    public java.util.List<java.lang.String> getDebugRunningsList() {
-      return debugRunnings_;
-    }
-    public int getDebugRunningsCount() { return debugRunnings_.size(); }
-    public java.lang.String getDebugRunnings(int index) {
-      return debugRunnings_.get(index);
-    }
-    
-    // repeated string manualRunnings = 3;
-    public static final int MANUALRUNNINGS_FIELD_NUMBER = 3;
+    // repeated string manualRunnings = 2;
+    public static final int MANUALRUNNINGS_FIELD_NUMBER = 2;
     private java.util.List<java.lang.String> manualRunnings_ =
       java.util.Collections.emptyList();
     public java.util.List<java.lang.String> getManualRunningsList() {
@@ -2653,15 +2635,15 @@ public final class Protocol {
       return manualRunnings_.get(index);
     }
     
-    // optional int64 timestamp = 4;
-    public static final int TIMESTAMP_FIELD_NUMBER = 4;
+    // optional int64 timestamp = 3;
+    public static final int TIMESTAMP_FIELD_NUMBER = 3;
     private boolean hasTimestamp;
     private long timestamp_ = 0L;
     public boolean hasTimestamp() { return hasTimestamp; }
     public long getTimestamp() { return timestamp_; }
     
-    // optional float mem_rate = 5;
-    public static final int MEM_RATE_FIELD_NUMBER = 5;
+    // optional float mem_rate = 4;
+    public static final int MEM_RATE_FIELD_NUMBER = 4;
     private boolean hasMemRate;
     private float memRate_ = 0F;
     public boolean hasMemRate() { return hasMemRate; }
@@ -2679,17 +2661,14 @@ public final class Protocol {
       for (java.lang.String element : getRunningsList()) {
         output.writeString(1, element);
       }
-      for (java.lang.String element : getDebugRunningsList()) {
+      for (java.lang.String element : getManualRunningsList()) {
         output.writeString(2, element);
       }
-      for (java.lang.String element : getManualRunningsList()) {
-        output.writeString(3, element);
-      }
       if (hasTimestamp()) {
-        output.writeInt64(4, getTimestamp());
+        output.writeInt64(3, getTimestamp());
       }
       if (hasMemRate()) {
-        output.writeFloat(5, getMemRate());
+        output.writeFloat(4, getMemRate());
       }
       getUnknownFields().writeTo(output);
     }
@@ -2711,15 +2690,6 @@ public final class Protocol {
       }
       {
         int dataSize = 0;
-        for (java.lang.String element : getDebugRunningsList()) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeStringSizeNoTag(element);
-        }
-        size += dataSize;
-        size += 1 * getDebugRunningsList().size();
-      }
-      {
-        int dataSize = 0;
         for (java.lang.String element : getManualRunningsList()) {
           dataSize += com.google.protobuf.CodedOutputStream
             .computeStringSizeNoTag(element);
@@ -2729,11 +2699,11 @@ public final class Protocol {
       }
       if (hasTimestamp()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(4, getTimestamp());
+          .computeInt64Size(3, getTimestamp());
       }
       if (hasMemRate()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(5, getMemRate());
+          .computeFloatSize(4, getMemRate());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2881,10 +2851,6 @@ public final class Protocol {
           result.runnings_ =
             java.util.Collections.unmodifiableList(result.runnings_);
         }
-        if (result.debugRunnings_ != java.util.Collections.EMPTY_LIST) {
-          result.debugRunnings_ =
-            java.util.Collections.unmodifiableList(result.debugRunnings_);
-        }
         if (result.manualRunnings_ != java.util.Collections.EMPTY_LIST) {
           result.manualRunnings_ =
             java.util.Collections.unmodifiableList(result.manualRunnings_);
@@ -2910,12 +2876,6 @@ public final class Protocol {
             result.runnings_ = new java.util.ArrayList<java.lang.String>();
           }
           result.runnings_.addAll(other.runnings_);
-        }
-        if (!other.debugRunnings_.isEmpty()) {
-          if (result.debugRunnings_.isEmpty()) {
-            result.debugRunnings_ = new java.util.ArrayList<java.lang.String>();
-          }
-          result.debugRunnings_.addAll(other.debugRunnings_);
         }
         if (!other.manualRunnings_.isEmpty()) {
           if (result.manualRunnings_.isEmpty()) {
@@ -2959,18 +2919,14 @@ public final class Protocol {
               break;
             }
             case 18: {
-              addDebugRunnings(input.readString());
-              break;
-            }
-            case 26: {
               addManualRunnings(input.readString());
               break;
             }
-            case 32: {
+            case 24: {
               setTimestamp(input.readInt64());
               break;
             }
-            case 45: {
+            case 37: {
               setMemRate(input.readFloat());
               break;
             }
@@ -3019,47 +2975,7 @@ public final class Protocol {
         return this;
       }
       
-      // repeated string debugRunnings = 2;
-      public java.util.List<java.lang.String> getDebugRunningsList() {
-        return java.util.Collections.unmodifiableList(result.debugRunnings_);
-      }
-      public int getDebugRunningsCount() {
-        return result.getDebugRunningsCount();
-      }
-      public java.lang.String getDebugRunnings(int index) {
-        return result.getDebugRunnings(index);
-      }
-      public Builder setDebugRunnings(int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  result.debugRunnings_.set(index, value);
-        return this;
-      }
-      public Builder addDebugRunnings(java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  if (result.debugRunnings_.isEmpty()) {
-          result.debugRunnings_ = new java.util.ArrayList<java.lang.String>();
-        }
-        result.debugRunnings_.add(value);
-        return this;
-      }
-      public Builder addAllDebugRunnings(
-          java.lang.Iterable<? extends java.lang.String> values) {
-        if (result.debugRunnings_.isEmpty()) {
-          result.debugRunnings_ = new java.util.ArrayList<java.lang.String>();
-        }
-        super.addAll(values, result.debugRunnings_);
-        return this;
-      }
-      public Builder clearDebugRunnings() {
-        result.debugRunnings_ = java.util.Collections.emptyList();
-        return this;
-      }
-      
-      // repeated string manualRunnings = 3;
+      // repeated string manualRunnings = 2;
       public java.util.List<java.lang.String> getManualRunningsList() {
         return java.util.Collections.unmodifiableList(result.manualRunnings_);
       }
@@ -3099,7 +3015,7 @@ public final class Protocol {
         return this;
       }
       
-      // optional int64 timestamp = 4;
+      // optional int64 timestamp = 3;
       public boolean hasTimestamp() {
         return result.hasTimestamp();
       }
@@ -3117,7 +3033,7 @@ public final class Protocol {
         return this;
       }
       
-      // optional float mem_rate = 5;
+      // optional float mem_rate = 4;
       public boolean hasMemRate() {
         return result.hasMemRate();
       }
@@ -3812,333 +3728,6 @@ public final class Protocol {
     // @@protoc_insertion_point(class_scope:com.voson.dataant.socket.protocol.CancelMessage)
   }
   
-  public static final class DebugMessage extends
-      com.google.protobuf.GeneratedMessage {
-    // Use DebugMessage.newBuilder() to construct.
-    private DebugMessage() {
-      initFields();
-    }
-    private DebugMessage(boolean noInit) {}
-    
-    private static final DebugMessage defaultInstance;
-    public static DebugMessage getDefaultInstance() {
-      return defaultInstance;
-    }
-    
-    public DebugMessage getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.voson.dataant.socket.protocol.Protocol.internal_static_com_voson_dataant_socket_protocol_DebugMessage_descriptor;
-    }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.voson.dataant.socket.protocol.Protocol.internal_static_com_voson_dataant_socket_protocol_DebugMessage_fieldAccessorTable;
-    }
-    
-    // required string debugId = 1;
-    public static final int DEBUGID_FIELD_NUMBER = 1;
-    private boolean hasDebugId;
-    private java.lang.String debugId_ = "";
-    public boolean hasDebugId() { return hasDebugId; }
-    public java.lang.String getDebugId() { return debugId_; }
-    
-    // optional sint32 exitCode = 2;
-    public static final int EXITCODE_FIELD_NUMBER = 2;
-    private boolean hasExitCode;
-    private int exitCode_ = 0;
-    public boolean hasExitCode() { return hasExitCode; }
-    public int getExitCode() { return exitCode_; }
-    
-    private void initFields() {
-    }
-    public final boolean isInitialized() {
-      if (!hasDebugId) return false;
-      return true;
-    }
-    
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (hasDebugId()) {
-        output.writeString(1, getDebugId());
-      }
-      if (hasExitCode()) {
-        output.writeSInt32(2, getExitCode());
-      }
-      getUnknownFields().writeTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
-      size = 0;
-      if (hasDebugId()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getDebugId());
-      }
-      if (hasExitCode()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeSInt32Size(2, getExitCode());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-    
-    public static com.voson.dataant.socket.protocol.Protocol.DebugMessage parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static com.voson.dataant.socket.protocol.Protocol.DebugMessage parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.voson.dataant.socket.protocol.Protocol.DebugMessage parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static com.voson.dataant.socket.protocol.Protocol.DebugMessage parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.voson.dataant.socket.protocol.Protocol.DebugMessage parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static com.voson.dataant.socket.protocol.Protocol.DebugMessage parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.voson.dataant.socket.protocol.Protocol.DebugMessage parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static com.voson.dataant.socket.protocol.Protocol.DebugMessage parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static com.voson.dataant.socket.protocol.Protocol.DebugMessage parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static com.voson.dataant.socket.protocol.Protocol.DebugMessage parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.voson.dataant.socket.protocol.Protocol.DebugMessage prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-    
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.voson.dataant.socket.protocol.Protocol.DebugMessage result;
-      
-      // Construct using com.voson.dataant.socket.protocol.Protocol.DebugMessage.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.voson.dataant.socket.protocol.Protocol.DebugMessage();
-        return builder;
-      }
-      
-      protected com.voson.dataant.socket.protocol.Protocol.DebugMessage internalGetResult() {
-        return result;
-      }
-      
-      public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.voson.dataant.socket.protocol.Protocol.DebugMessage();
-        return this;
-      }
-      
-      public Builder clone() {
-        return create().mergeFrom(result);
-      }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.voson.dataant.socket.protocol.Protocol.DebugMessage.getDescriptor();
-      }
-      
-      public com.voson.dataant.socket.protocol.Protocol.DebugMessage getDefaultInstanceForType() {
-        return com.voson.dataant.socket.protocol.Protocol.DebugMessage.getDefaultInstance();
-      }
-      
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
-      public com.voson.dataant.socket.protocol.Protocol.DebugMessage build() {
-        if (result != null && !isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return buildPartial();
-      }
-      
-      private com.voson.dataant.socket.protocol.Protocol.DebugMessage buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return buildPartial();
-      }
-      
-      public com.voson.dataant.socket.protocol.Protocol.DebugMessage buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
-        }
-        com.voson.dataant.socket.protocol.Protocol.DebugMessage returnMe = result;
-        result = null;
-        return returnMe;
-      }
-      
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.voson.dataant.socket.protocol.Protocol.DebugMessage) {
-          return mergeFrom((com.voson.dataant.socket.protocol.Protocol.DebugMessage)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-      
-      public Builder mergeFrom(com.voson.dataant.socket.protocol.Protocol.DebugMessage other) {
-        if (other == com.voson.dataant.socket.protocol.Protocol.DebugMessage.getDefaultInstance()) return this;
-        if (other.hasDebugId()) {
-          setDebugId(other.getDebugId());
-        }
-        if (other.hasExitCode()) {
-          setExitCode(other.getExitCode());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              setDebugId(input.readString());
-              break;
-            }
-            case 16: {
-              setExitCode(input.readSInt32());
-              break;
-            }
-          }
-        }
-      }
-      
-      
-      // required string debugId = 1;
-      public boolean hasDebugId() {
-        return result.hasDebugId();
-      }
-      public java.lang.String getDebugId() {
-        return result.getDebugId();
-      }
-      public Builder setDebugId(java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasDebugId = true;
-        result.debugId_ = value;
-        return this;
-      }
-      public Builder clearDebugId() {
-        result.hasDebugId = false;
-        result.debugId_ = getDefaultInstance().getDebugId();
-        return this;
-      }
-      
-      // optional sint32 exitCode = 2;
-      public boolean hasExitCode() {
-        return result.hasExitCode();
-      }
-      public int getExitCode() {
-        return result.getExitCode();
-      }
-      public Builder setExitCode(int value) {
-        result.hasExitCode = true;
-        result.exitCode_ = value;
-        return this;
-      }
-      public Builder clearExitCode() {
-        result.hasExitCode = false;
-        result.exitCode_ = 0;
-        return this;
-      }
-      
-      // @@protoc_insertion_point(builder_scope:com.voson.dataant.socket.protocol.DebugMessage)
-    }
-    
-    static {
-      defaultInstance = new DebugMessage(true);
-      com.voson.dataant.socket.protocol.Protocol.internalForceInit();
-      defaultInstance.initFields();
-    }
-    
-    // @@protoc_insertion_point(class_scope:com.voson.dataant.socket.protocol.DebugMessage)
-  }
-  
   public static final class ManualMessage extends
       com.google.protobuf.GeneratedMessage {
     // Use ManualMessage.newBuilder() to construct.
@@ -4507,11 +4096,6 @@ public final class Protocol {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_com_voson_dataant_socket_protocol_CancelMessage_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_voson_dataant_socket_protocol_DebugMessage_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_com_voson_dataant_socket_protocol_DebugMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_com_voson_dataant_socket_protocol_ManualMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -4548,23 +4132,20 @@ public final class Protocol {
       ".socket.protocol.Status\022\013\n\003rid\030\002 \002(\021\022;\n\007" +
       "operate\030\003 \002(\0162*.com.voson.dataant.socket" +
       ".protocol.Operate\022\021\n\terrorText\030\004 \001(\t\022\014\n\004" +
-      "body\030\005 \001(\014\"x\n\020HeartBeatMessage\022\020\n\010runnin" +
-      "gs\030\001 \003(\t\022\025\n\rdebugRunnings\030\002 \003(\t\022\026\n\016manua" +
-      "lRunnings\030\003 \003(\t\022\021\n\ttimestamp\030\004 \001(\003\022\020\n\010me" +
-      "m_rate\030\005 \001(\002\"1\n\016ExecuteMessage\022\r\n\005jobId\030" +
-      "\001 \002(\t\022\020\n\010exitCode\030\002 \001(\021\"W\n\rCancelMessage" +
-      "\022:\n\002ek\030\001 \002(\0162..com.voson.dataant.socket." +
-      "protocol.ExecuteKind\022\n\n\002id\030\002 \002(\t\"1\n\014Debu",
-      "gMessage\022\017\n\007debugId\030\001 \002(\t\022\020\n\010exitCode\030\002 " +
-      "\001(\021\"4\n\rManualMessage\022\021\n\thistoryId\030\001 \002(\t\022" +
-      "\020\n\010exitCode\030\002 \001(\021*\033\n\006Status\022\006\n\002OK\020\000\022\t\n\005E" +
-      "RROR\020\001*>\n\013ExecuteKind\022\020\n\014ScheduleKind\020\000\022" +
-      "\016\n\nManualKind\020\001\022\r\n\tDebugKind\020\002*L\n\nWebOpe" +
-      "rate\022\r\n\tUpdateJob\020\001\022\016\n\nExecuteJob\020\002\022\r\n\tC" +
-      "ancelJob\020\003\022\020\n\014ExecuteDebug\020\004*I\n\007Operate\022" +
-      "\r\n\tHeartBeat\020\000\022\014\n\010Schedule\020\001\022\n\n\006Cancel\020\002" +
-      "\022\t\n\005Debug\020\003\022\n\n\006Manual\020\004B/\n!com.voson.dat" +
-      "aant.socket.protocolB\010ProtocolH\001"
+      "body\030\005 \001(\014\"a\n\020HeartBeatMessage\022\020\n\010runnin" +
+      "gs\030\001 \003(\t\022\026\n\016manualRunnings\030\002 \003(\t\022\021\n\ttime" +
+      "stamp\030\003 \001(\003\022\020\n\010mem_rate\030\004 \001(\002\"1\n\016Execute" +
+      "Message\022\r\n\005jobId\030\001 \002(\t\022\020\n\010exitCode\030\002 \001(\021" +
+      "\"W\n\rCancelMessage\022:\n\002ek\030\001 \002(\0162..com.voso" +
+      "n.dataant.socket.protocol.ExecuteKind\022\n\n" +
+      "\002id\030\002 \002(\t\"4\n\rManualMessage\022\021\n\thistoryId\030",
+      "\001 \002(\t\022\020\n\010exitCode\030\002 \001(\021*\033\n\006Status\022\006\n\002OK\020" +
+      "\000\022\t\n\005ERROR\020\001*/\n\013ExecuteKind\022\020\n\014ScheduleK" +
+      "ind\020\000\022\016\n\nManualKind\020\001*:\n\nWebOperate\022\r\n\tU" +
+      "pdateJob\020\001\022\016\n\nExecuteJob\020\002\022\r\n\tCancelJob\020" +
+      "\003*>\n\007Operate\022\r\n\tHeartBeat\020\000\022\014\n\010Schedule\020" +
+      "\001\022\n\n\006Cancel\020\002\022\n\n\006Manual\020\003B/\n!com.voson.d" +
+      "ataant.socket.protocolB\010ProtocolH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4616,7 +4197,7 @@ public final class Protocol {
           internal_static_com_voson_dataant_socket_protocol_HeartBeatMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_voson_dataant_socket_protocol_HeartBeatMessage_descriptor,
-              new java.lang.String[] { "Runnings", "DebugRunnings", "ManualRunnings", "Timestamp", "MemRate", },
+              new java.lang.String[] { "Runnings", "ManualRunnings", "Timestamp", "MemRate", },
               com.voson.dataant.socket.protocol.Protocol.HeartBeatMessage.class,
               com.voson.dataant.socket.protocol.Protocol.HeartBeatMessage.Builder.class);
           internal_static_com_voson_dataant_socket_protocol_ExecuteMessage_descriptor =
@@ -4635,16 +4216,8 @@ public final class Protocol {
               new java.lang.String[] { "Ek", "Id", },
               com.voson.dataant.socket.protocol.Protocol.CancelMessage.class,
               com.voson.dataant.socket.protocol.Protocol.CancelMessage.Builder.class);
-          internal_static_com_voson_dataant_socket_protocol_DebugMessage_descriptor =
-            getDescriptor().getMessageTypes().get(8);
-          internal_static_com_voson_dataant_socket_protocol_DebugMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_voson_dataant_socket_protocol_DebugMessage_descriptor,
-              new java.lang.String[] { "DebugId", "ExitCode", },
-              com.voson.dataant.socket.protocol.Protocol.DebugMessage.class,
-              com.voson.dataant.socket.protocol.Protocol.DebugMessage.Builder.class);
           internal_static_com_voson_dataant_socket_protocol_ManualMessage_descriptor =
-            getDescriptor().getMessageTypes().get(9);
+            getDescriptor().getMessageTypes().get(8);
           internal_static_com_voson_dataant_socket_protocol_ManualMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_voson_dataant_socket_protocol_ManualMessage_descriptor,

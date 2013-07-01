@@ -58,7 +58,7 @@ public class WorkerHandler extends SimpleChannelUpstreamHandler{
 		if(sm.getKind()==Kind.REQUEST){
 			final Request request=Request.newBuilder().mergeFrom(sm.getBody()).build();
 			Operate op=request.getOperate();
-			if(op==Operate.Schedule || op==Operate.Manual || op==Operate.Debug){
+			if(op==Operate.Schedule || op==Operate.Manual){
 				completionService.submit(new Callable<Response>() {
 					private WorkerBeExecute execute=new WorkerBeExecute();
 					public Response call() throws Exception {

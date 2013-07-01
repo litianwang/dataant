@@ -4,8 +4,8 @@
 
 <html>
 <head>
-	<title>任务管理</title>
-	
+	<title>作业管理</title>
+	<%@include file="/common/meta.jsp"%>
 	<script>
 		$(document).ready(function() {
 			//聚焦第一个输入框
@@ -20,7 +20,14 @@
 	<form id="inputForm" action="${ctx}/job/${action}" method="post" class="form-horizontal">
 		<input type="hidden" name="id" value="${job.id}"/>
 		<fieldset>
-			<legend><small>管理任务</small></legend>
+			<div class="form-actions">
+				<input id="submit_btn" class="btn btn-primary" type="submit" value="保存"/>&nbsp;
+				<a class="btn btn-success" href="${ctx}/job/run/${job.id}/1"><i class="icon-play icon-white"></i>手动运行</a>&nbsp;	
+				<a class="btn btn-success" href="${ctx}/job/run/${job.id}/2"><i class="icon-repeat icon-white"></i>手动恢复</a>&nbsp;	
+				<a class="btn btn-danger" href="${ctx}/job/swtich/${job.id}/${job.auto eq '0'?true:false}"><i class="icon-adjust icon-white"></i>开启/关闭</a>&nbsp;
+				<a class="btn btn-success" href="${ctx}/jobhistory?search_EQ_jobId=${job.id}"><i class="icon-info-sign icon-white"></i>运行日志</a>&nbsp;		
+				<input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
+			</div>
 			<div class="control-group">
 				<label for="description" class="control-label">ID:</label>
 				<div class="controls">
@@ -72,7 +79,7 @@
 			<div class="control-group">
 				<label for="description" class="control-label">分组ID:</label>
 				<div class="controls">
-					<textarea id="groupId" name="groupId" class="input-large">${job.groupId}</textarea>
+					<textarea id="groupId" name="groupId" readonly="readonly" class="input-large">${job.groupId}</textarea>
 				</div>
 			</div>	
 			<div class="control-group">
@@ -142,7 +149,7 @@
 				</div>
 			</div>	
 			<div class="form-actions">
-				<input id="submit_btn" class="btn btn-primary" type="submit" value="提交"/>&nbsp;	
+				<input id="submit_btn" class="btn btn-primary" type="submit" value="保存"/>&nbsp;	
 				<input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
 			</div>
 		</fieldset>

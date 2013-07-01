@@ -102,7 +102,7 @@ public class GroupController {
 	public String update(@Valid @ModelAttribute("preloadDataantGroup") GroupPersistence dataantGroup, RedirectAttributes redirectAttributes) {
 		groupService.saveDataantGroup(dataantGroup);
 		redirectAttributes.addFlashAttribute("message", "更新任务成功");
-		return "redirect:/group/";
+		return "redirect:/group/update/" + dataantGroup.getId();
 	}
 
 	@RequestMapping(value = "delete/{id}")

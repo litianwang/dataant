@@ -6,7 +6,7 @@
 <html>
 <head>
 	<title>作业日志</title>
-	
+	<%@include file="/common/meta.jsp"%>
 	<script>
 		$(document).ready(function() {
 			$("#sch-jobhistory-tab").addClass("active");

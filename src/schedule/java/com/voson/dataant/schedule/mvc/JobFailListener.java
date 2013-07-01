@@ -7,9 +7,15 @@
 //import org.apache.log4j.LogManager;
 //import org.apache.log4j.Logger;
 //
+//import com.voson.dataant.model.JobStatus.TriggerType;
 //import com.voson.dataant.mvc.DispatcherListener;
 //import com.voson.dataant.mvc.MvcEvent;
+//import com.voson.dataant.schedule.mvc.event.JobFailedEvent;
 //import com.voson.dataant.socket.master.MasterContext;
+//import com.voson.dataant.store.GroupBean;
+//import com.voson.dataant.store.GroupManager;
+//import com.voson.dataant.store.JobBean;
+//import com.voson.dataant.store.JobHistoryManager;
 ///**
 // * 任务失败的监听
 // * 当任务失败，需要发送邮件给相关人员
@@ -111,7 +117,7 @@
 //					int hour=now.get(Calendar.HOUR_OF_DAY);
 //					int day=now.get(Calendar.DAY_OF_WEEK);
 //					if(day==Calendar.SATURDAY || day==Calendar.SUNDAY || hour<9 || hour>18){
-//						smsAlarm.alarm(event.getHistory().getId(), "宙斯报警", "宙斯"+msg,chain);
+//						smsAlarm.alarm(event.getHistory().getId(), "DataAnt报警", "DataAnt"+msg,chain);
 //					}
 //				}
 //				
