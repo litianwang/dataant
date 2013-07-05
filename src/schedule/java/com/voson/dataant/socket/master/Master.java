@@ -21,7 +21,10 @@ import com.voson.dataant.model.JobStatus.TriggerType;
 import com.voson.dataant.schedule.mvc.AddJobListener;
 import com.voson.dataant.schedule.mvc.DataantJobException;
 import com.voson.dataant.schedule.mvc.JobController;
+import com.voson.dataant.schedule.mvc.JobFailListener;
+import com.voson.dataant.schedule.mvc.JobSuccessListener;
 import com.voson.dataant.schedule.mvc.ScheduleInfoLog;
+import com.voson.dataant.schedule.mvc.StopScheduleJobListener;
 import com.voson.dataant.schedule.mvc.event.Events;
 import com.voson.dataant.schedule.mvc.event.JobFailedEvent;
 import com.voson.dataant.schedule.mvc.event.JobSuccessEvent;
@@ -33,6 +36,7 @@ import com.voson.dataant.socket.protocol.Protocol.Response;
 import com.voson.dataant.socket.protocol.Protocol.Status;
 import com.voson.dataant.store.GroupBean;
 import com.voson.dataant.store.JobBean;
+import com.voson.dataant.util.Environment;
 import com.voson.dataant.util.Tuple;
 
 public class Master {
@@ -44,19 +48,17 @@ public class Master {
 		this.context = context;
 		GroupBean root = context.getGroupManager().getGlobeGroupBean();
 
-//		if (Environment.isPrePub()) {
-//			// 如果是预发环境，添加stop listener，阻止自动调度执行
-//			context.getDispatcher().addDispatcherListener(
-//					new StopScheduleJobListener());
-//		}
+		if (Environment.isPrePub()) {
+			// 如果是预发环境，添加stop listener，阻止自动调度执行
+			context.getDispatcher().addDispatcherListener(
+					new StopScheduleJobListener());
+		}
 		context.getDispatcher().addDispatcherListener(
 				new AddJobListener(context, this));
-//		context.getDispatcher().addDispatcherListener(
-//				new JobFailListener(context));
-//		context.getDispatcher().addDispatcherListener(
-//				new DebugListener(context));
-//		context.getDispatcher().addDispatcherListener(
-//				new JobSuccessListener(context));
+		context.getDispatcher().addDispatcherListener(
+				new JobFailListener(context));
+		context.getDispatcher().addDispatcherListener(
+				new JobSuccessListener(context));
 		Map<String, JobBean> allJobBeans = root.getAllSubJobBeans();
 		for (String id : allJobBeans.keySet()) {
 			context.getDispatcher().addController(

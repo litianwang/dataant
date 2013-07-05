@@ -16,7 +16,6 @@ import java.util.Date;
 /**
  * <code>{@link DateConvertEditor}</code>
  *
- * TODO : document me
  *
  * @author litianwang
  */

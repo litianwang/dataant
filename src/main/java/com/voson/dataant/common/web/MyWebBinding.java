@@ -14,7 +14,6 @@ import org.springframework.web.context.request.WebRequest;
 /**
  * <code>{@link MyWebBinding}</code>
  *
- * TODO : document me
  *
  * @author litianwang
  */

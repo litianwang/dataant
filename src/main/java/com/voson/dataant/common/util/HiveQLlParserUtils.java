@@ -14,7 +14,6 @@ import org.apache.commons.io.FileUtils;
 /**
  * <code>{@link HiveQLlParserUtils}</code>
  *
- * TODO : document me
  *
  * @author litianwang
  */

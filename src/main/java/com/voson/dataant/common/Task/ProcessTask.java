@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 /**
  * <code>{@link ProcessTask}</code>
  *
- * TODO : document me
  *
  * @author litianwang
  */
@@ -38,7 +37,6 @@ public class ProcessTask implements Task {
 	 */
 	@Override
 	public Integer run() throws Exception {
-		// TODO implement ProcessTask.run
 		return null;
 	}
 

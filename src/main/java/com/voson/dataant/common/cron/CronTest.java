@@ -10,7 +10,6 @@ import java.util.Date;
 /**
  * <code>{@link CronTest}</code>
  *
- * TODO : document me
  *
  * @author litianwang
  */
@@ -21,7 +20,6 @@ public class CronTest {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
-		// TODO implement CronTest.main
 		CronExpression cron = new CronExpression("0 */5 * * * ? *");
 		Date runt = new Date();
 		for (int i = 0; i < 10; i++) {

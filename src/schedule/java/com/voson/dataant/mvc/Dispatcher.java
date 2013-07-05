@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.voson.dataant.schedule.mvc.ScheduleInfoLog;
+
 public class Dispatcher extends BaseObservable {
 
   public static final EventType BeforeDispatch = new EventType();
@@ -161,8 +163,7 @@ public class Dispatcher extends BaseObservable {
 		  fireEvent(AfterDispatch, e);
 		}
 	} catch (Exception e) {
-		//TODO:tivan
-		//ScheduleInfoLog.error("dispatch error", e);
+		ScheduleInfoLog.error("dispatch error", e);
 	}
   }
 

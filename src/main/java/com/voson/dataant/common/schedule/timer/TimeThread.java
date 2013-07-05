@@ -8,7 +8,6 @@ package com.voson.dataant.common.schedule.timer;
 /**
  * <code>{@link TimeThread}</code>
  *
- * TODO : document me
  *
  * @author litianwang
  */

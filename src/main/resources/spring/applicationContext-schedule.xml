@@ -24,6 +24,11 @@
 		</constructor-arg>
 	</bean>
 	
+	
+	<!--通知bean-->
+	<bean id="mailAlarm" class="com.voson.dataant.broadcast.alarm.MailAlarm" />
+	<bean id="smsAlarm" class="com.voson.dataant.broadcast.alarm.SMSAlarm" />
+	
 	<bean id="clientWorker" class="com.voson.dataant.socket.worker.ClientWorker" >
 	</bean>
 

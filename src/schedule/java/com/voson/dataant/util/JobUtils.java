@@ -67,7 +67,7 @@ public class JobUtils {
 		}else if(jobBean.getJobDescriptor().getJobType()==JobRunType.Hive){
 			core=new HiveJob(jobContext,applicationContext);
 		}
-		//TODO:tivan
+		//TODO:tivan作业依赖关系相关开发
 		List<Job> pres = new ArrayList<Job>();
 		List<Job> posts = new ArrayList<Job>();
 		Job job=new WithProcesserJob(jobContext, pres, posts, core,applicationContext);

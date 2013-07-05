@@ -25,7 +25,6 @@ import com.voson.dataant.common.Task.ProcessTask;
 /**
  * <code>{@link HiveTask}</code>
  *
- * TODO : document me
  *
  * @author litianwang
  */
