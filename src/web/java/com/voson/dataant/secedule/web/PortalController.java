@@ -5,20 +5,28 @@
  */
 package com.voson.dataant.secedule.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.voson.dataant.store.GroupBean;
 import com.voson.dataant.store.JobBean;
 import com.voson.dataant.store.mysql.MysqlGroupManager;
+import com.voson.dataant.store.mysql.persistence.GroupPersistence;
 
 /**
  * <code>{@link PortalController}</code>
@@ -36,13 +44,20 @@ public class PortalController {
 	
 	@RequestMapping(value = "")
 	public String index(Model model, ServletRequest request) {
+		return "portal/index";
+	}
+	
+	@RequestMapping(value = "group/tree", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> tree(Model model, ServletRequest request) {
 		String rootId = mysqlGroupManager.getRootGroupId();
 		GroupBean root = mysqlGroupManager.getDownstreamGroupBean(rootId);
-		
 		String treeJson = this.buildGroupTree(root);
-		System.out.println(treeJson);
-		model.addAttribute("treeJson", treeJson);
-		return "portal/index";
+		Map<String, Object> modelMap = new HashMap<String, Object>(3);  
+	    modelMap.put("total", "1");  
+	    modelMap.put("data", JSONObject.fromObject(treeJson));  
+	    modelMap.put("success", "true");
+		return modelMap;
 	}
 	
 	private String buildGroupTree(GroupBean group){

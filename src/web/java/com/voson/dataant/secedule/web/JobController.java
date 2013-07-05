@@ -1,6 +1,7 @@
 package com.voson.dataant.secedule.web;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -16,9 +17,11 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.modules.web.Servlets;
 
@@ -83,6 +86,31 @@ public class JobController {
 		model.addAttribute("action", "create");
 		return "job/jobForm";
 	}
+	
+	@RequestMapping(value = "add/group/{groupId}", method = RequestMethod.GET)
+	public String addForm(@PathVariable("groupId") Integer groupId,Model model) {
+		JobPersistence job = new JobPersistence();
+		job.setGroupId(groupId);
+		model.addAttribute("job", job);
+		model.addAttribute("action", "add");
+		return "job/add-jobForm";
+	}
+	
+	@RequestMapping(value = "add", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> add(@RequestBody JobPersistence newJob, RedirectAttributes redirectAttributes) {
+		this.buildJobPersistence(newJob);
+		//
+		newJob.setCronExpression("0 0 3 * * ?");
+		jobService.saveJob(newJob);
+		redirectAttributes.addFlashAttribute("message", "创建任务成功");
+		Map<String, Object> modelMap = new HashMap<String, Object>(3);  
+	    modelMap.put("total", "1");  
+	    modelMap.put("data", newJob);  
+	    modelMap.put("success", "true");
+		return modelMap;
+	}
+
 
 	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid JobPersistence newJob, RedirectAttributes redirectAttributes) {

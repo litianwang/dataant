@@ -19,10 +19,11 @@
 		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 	</c:if>
 	<div class="row">
-		<div class="span4 offset7">
+		<div class="span8 offset3">
 			<form class="form-search" action="#">
 				<label>名称：</label> <input type="text" name="search_LIKE_title" class="input-medium" value="${param.search_LIKE_title}"> 
 				<button type="submit" class="btn" id="search_btn">Search</button>
+				<input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
 		    </form>
 	    </div>
 	    <tags:sort/>

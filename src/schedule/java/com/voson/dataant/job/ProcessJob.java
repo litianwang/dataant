@@ -163,6 +163,11 @@ public abstract class ProcessJob extends AbstractJob implements Job {
 		envMap.put("instance.workDir", jobContext.getWorkDir());
 		
 		List<String> commands=getCommandList();
+		// TODO:tivan测试开发用
+		String os=System.getProperties().getProperty("os.name");
+		if(os!=null && (os.startsWith("win") || os.startsWith("Win"))){
+			return 0;
+		}
 		for(String s:commands){
 			log("DEBUG Command:"+s);
 			
@@ -176,8 +181,6 @@ public abstract class ProcessJob extends AbstractJob implements Job {
 			String threadName=null;
 			if(jobContext.getJobHistory()!=null && jobContext.getJobHistory().getJobId()!=null){
 				threadName="jobId="+jobContext.getJobHistory().getJobId();
-//			}else if(jobContext.getDebugHistory()!=null && jobContext.getDebugHistory().getId()!=null){
-//				threadName="debugId="+jobContext.getDebugHistory().getId();
 			}else{
 				threadName="not-normal-job";
 			}

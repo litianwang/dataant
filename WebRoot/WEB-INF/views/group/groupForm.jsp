@@ -12,21 +12,45 @@
 			$("#dataantgroup_title").focus();
 			//为inputForm注册validate函数
 			$("#inputForm").validate();
-			alert('${treeJson}');
+			//alert('${treeJson}');
+			setTimeout("$('.alert').alert('close')",10000);
+			
 		});
-        function f_open2()
+		
+        function add_group()
         {
             $.ligerDialog.open({ url: '${ctx}/group/add/parent/${dataantGroup.id}', 
             	title:'添加组',
                 height: 300, 
                 width: 500, 
                 buttons: [
-                          { text: '确定', onclick: function (item, dialog) {
+                          { text: '确定', 
+                            onclick: function (item, dialog) {
                               	// 
 								dialog.frame.submitForm(dialog);
                               }
                           },
-                          { text: '取消', onclick: function (item, dialog) { dialog.close(); } }
+                          { text: '取消', 
+                            onclick: function (item, dialog) { dialog.close(); } }
+                       ],
+                isResize: true
+            });
+        }
+        function add_job()
+        {
+            $.ligerDialog.open({ url: '${ctx}/job/add/group/${dataantGroup.id}', 
+            	title:'添加任务',
+                height: 200, 
+                width: 500, 
+                buttons: [
+                          { text: '确定', 
+                            onclick: function (item, dialog) {
+                              	// 
+								dialog.frame.submitForm(dialog);
+                              }
+                          },
+                          { text: '取消', 
+                            onclick: function (item, dialog) { dialog.close(); } }
                        ],
                 isResize: true
             });
@@ -39,15 +63,19 @@
 		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 	</c:if>
 	<form id="inputForm" action="${ctx}/group/${action}" method="post" class="form-horizontal">
+		<input type="hidden" id="parent" name="parent" value="${dataantGroup.parent}"/>
+		<input type="hidden" id="gmtCreate" name="gmtCreate" class="input-large" value="${dataantGroup.gmtCreate}"/>
+		<input type="hidden" id="gmtModified" name="gmtModified" class="input-large" value="${dataantGroup.gmtModified}"/>
+		<input type="hidden" id="directory" name="directory" readonly="readonly" class="input-xlarge" value="${dataantGroup.directory}"/>
 		<fieldset>
 			<div class="form-actions">
 				<input id="submit_btn" class="btn btn-primary" type="submit" value="保存"/>&nbsp;
 				<c:if test="${!(empty dataantGroup.id)}">
 					<c:if test="${dataantGroup.directory eq '0'}">
-						<a class="btn btn-success" href="#" onclick="f_open2()"><i class="icon-folder-close icon-white"></i>添加组</a>&nbsp;	
+						<a class="btn btn-success" href="#" onclick="add_group()"><i class="icon-folder-close icon-white"></i>添加组</a>&nbsp;	
 					</c:if>
 					<c:if test="${dataantGroup.directory eq '1'}">
-						<a class="btn btn-success" href="${ctx}/job/create/group/${dataantGroup.id}"><i class="icon-file icon-white"></i>添加任务</a>&nbsp;	
+						<a class="btn btn-success" href="#" onclick="add_job()"><i class="icon-file icon-white"></i>添加任务</a>&nbsp;	
 					</c:if>
 				</c:if>
 				<input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
@@ -56,36 +84,6 @@
 				<label for="id" class="control-label">ID:</label>
 					<div class="controls">
 						<input id="id" name="id" class="input-large" value="${dataantGroup.id}"/>
-					</div>
-			</div>	
-			<div class="control-group">
-				<label for="configs" class="control-label">配置项:</label>
-					<div class="controls">
-						<input id="configs" name="configs" class="input-xlarge" value="${dataantGroup.configs}"/>
-					</div>
-			</div>	
-			<div class="control-group">
-				<label for="descr" class="control-label">描述:</label>
-					<div class="controls">
-						<input id="descr" name="descr" class="input-xlarge" value="${dataantGroup.descr}"/>
-					</div>
-			</div>	
-			<div class="control-group">
-				<label for="directory" class="control-label">目录:</label>
-					<div class="controls">
-						<input id="directory" name="directory" class="input-large" value="${dataantGroup.directory}"/>
-					</div>
-			</div>	
-			<div class="control-group">
-				<label for="gmtCreate" class="control-label">创建时间:</label>
-					<div class="controls">
-						<input id="gmtCreate" name="gmtCreate" class="input-large" value="${dataantGroup.gmtCreate}"/>
-					</div>
-			</div>	
-			<div class="control-group">
-				<label for="gmtModified" class="control-label">修改时间:</label>
-					<div class="controls">
-						<input id="gmtModified" name="gmtModified" class="input-large" value="${dataantGroup.gmtModified}"/>
 					</div>
 			</div>	
 			<div class="control-group">
@@ -101,21 +99,24 @@
 					</div>
 			</div>	
 			<div class="control-group">
-				<label for="parent" class="control-label">父组:</label>
-					<div class="controls">
-						<input id="parent" name="parent" class="input-large" value="${dataantGroup.parent}"/>
-					</div>
-			</div>	
-			<div class="control-group">
 				<label for="resources" class="control-label">资源项:</label>
 					<div class="controls">
 						<input id="resources" name="resources" class="input-xlarge" value="${dataantGroup.resources}"/>
 					</div>
 			</div>	
-			<div class="form-actions">
-				<input id="submit_btn" class="btn btn-primary" type="submit" value="提交"/>&nbsp;	
-				<input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
-			</div>
+			<div class="control-group">
+				<label for="configs" class="control-label">配置项:</label>
+					<div class="controls">
+						<input id="configs" name="configs" class="input-xlarge" value="${dataantGroup.configs}"/>
+					</div>
+			</div>	
+			<div class="control-group">
+				<label for="descr" class="control-label">描述:</label>
+					<div class="controls">
+						<input id="descr" name="descr" class="input-xlarge" value="${dataantGroup.descr}"/>
+					</div>
+			</div>	
+			
 		</fieldset>
 	</form>
 </body>

@@ -18,10 +18,10 @@
 
 <body>
 	<form id="inputForm" action="${ctx}/dataantjobhistory/${action}" method="post" class="form-horizontal">
-		<input type="hidden" name="id" value="${dataantJobHistory.id}"/>
+			<div class="form-actions">
+				<input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
+			</div>
 		<fieldset>
-			<legend><small>管理任务</small></legend>
-			
 			<div class="control-group">
 				<label for="id" class="control-label">ID:</label>
 					<div class="controls">
@@ -100,9 +100,6 @@
 						<input id="triggerType" name="triggerType" class="input-large" value="${dataantJobHistory.triggerType}"/>
 					</div>
 			</div>	
-			<div class="form-actions">
-				<input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
-			</div>
 		</fieldset>
 	</form>
 </body>

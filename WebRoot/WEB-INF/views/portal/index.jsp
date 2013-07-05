@@ -14,7 +14,8 @@
 <meta http-equiv="Expires" content="0" />
 
 <link href="${ctx}/static/liger-ui/lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" /> 
-<script src="${ctx}/static/liger-ui/lib/jquery/jquery-1.3.2.min.js" type="text/javascript"></script>    
+<script src="${ctx}/static/liger-ui/lib/jquery/jquery-1.3.2.min.js" type="text/javascript"></script>  
+<script src="${ctx}/static/jquery/jquery.json-2.2.min.js" type="text/javascript"></script>  
 <script src="${ctx}/static/liger-ui/lib/ligerUI/js/ligerui.min.js" type="text/javascript"></script> 
 <script src="${ctx}/static/liger-ui/indexdata.js" type="text/javascript"></script>
 
@@ -22,7 +23,24 @@
             var tab = null;
             var accordion = null;
             var tree = null;
-            var treeJson = [${treeJson}];
+            function reloadTree(){
+            	jQuery.ajax( {
+  		          type : 'GET',
+  		          contentType : 'application/json',
+  		          url : '${ctx}/portal/group/tree',
+  		          dataType : 'json',
+  		          success : function(response) {
+  			          if(response.success){
+  				        tree.clear();
+  				        tree.setData([response.data]);
+  				        tree.expandAll();
+  			          }
+  		          },
+  		          error : function(response) {
+  		            alert("加载调度中心分组失败");
+  		          }
+  		        });
+            }
             $(function ()
             {
 
@@ -46,7 +64,7 @@
                 });
                 //树
                 $("#tree1").ligerTree({
-                    data : treeJson,
+                    data : [],
                     checkbox: false,
                     slide: false,
                     nodeWidth: 120,
@@ -68,7 +86,7 @@
                 accordion = $("#accordion1").ligerGetAccordionManager();
                 tree = $("#tree1").ligerGetTreeManager();
                 $("#pageloading").hide();
-
+                reloadTree();
             });
             function f_heightChanged(options)
             {

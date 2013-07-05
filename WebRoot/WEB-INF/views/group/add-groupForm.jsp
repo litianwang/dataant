@@ -30,17 +30,20 @@
 			};
 		function submitForm(dialog){
 			 var jsonuserinfo = $.toJSON($('#inputForm').serializeObject());
-		        alert(jsonuserinfo);
 		        jQuery.ajax( {
 		          type : 'POST',
 		          contentType : 'application/json',
 		          url : '${ctx}/group/${action}',
 		          data : jsonuserinfo,
 		          dataType : 'json',
-		          success : function(data) {
-		            alert("新增成功！");
+		          success : function(response) {
+			          if(response.success){
+			            alert("新增成功！");
+				        parent.parent.reloadTree();
+			            dialog.close();
+			          }
 		          },
-		          error : function(data) {
+		          error : function(response) {
 		            alert("error");
 		          }
 		        });
@@ -57,19 +60,22 @@
 			<div class="control-group">
 				<label for="name" class="control-label">名称:</label>
 					<div class="controls">
-						<input id="name" name="name" class="input-xlarge" value="${dataantGroup.name}"/>
+						<input id="name" name="name" class="input-xlarge" value=""/>
 					</div>
 			</div>	
 			<div class="control-group">
 				<label for="descr" class="control-label">描述:</label>
 					<div class="controls">
-						<input id="descr" name="descr" class="input-xlarge" value="${dataantGroup.descr}"/>
+						<input id="descr" name="descr" class="input-xlarge" value=""/>
 					</div>
 			</div>	
 			<div class="control-group">
-				<label for="directory" class="control-label">目录:</label>
+				<label for="directory" class="control-label">组类型:</label>
 					<div class="controls">
-						<input id="directory" name="directory" class="input-large" value="${dataantGroup.directory}"/>
+						<select class="span3" id="directory" name="directory" value="" >
+							<option value="0">大目录</option>
+							<option  value="1">小目录</option>
+						</select>
 					</div>
 			</div>	
 		</fieldset>
