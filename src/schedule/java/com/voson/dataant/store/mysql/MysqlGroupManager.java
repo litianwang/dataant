@@ -171,7 +171,7 @@ public class MysqlGroupManager implements GroupManager{
 		Page<GroupPersistence> list = groupPersistenceDao.findAll(new PageRequest(0, 1, new Sort(Direction.ASC, "id")));
 		if(list==null || list.getNumberOfElements()==0){
 			GroupPersistence persist=new GroupPersistence();
-			persist.setName("众神之神");
+			persist.setName("总部");
 			persist.setOwner("litianwang");
 			persist.setDirectory(0);
 			groupPersistenceDao.save(persist);
@@ -181,28 +181,7 @@ public class MysqlGroupManager implements GroupManager{
 			return String.valueOf(persist.getId());
 		}
 		return String.valueOf(list.iterator().next().getId());
-		
-//		return (String) getHibernateTemplate().execute(new HibernateCallback() {
-//			@Override
-//			public Object doInHibernate(Session session) throws HibernateException,
-//					SQLException {
-//				Query query=session.createQuery("from com.voson.hornet.store.mysql.persistence.GroupPersistence g order by g.id asc");
-//				query.setMaxResults(1);
-//				List<GroupPersistence> list=query.list();
-//				if(list==null || list.size()==0){
-//					GroupPersistence persist=new GroupPersistence();
-//					persist.setName("众神之神");
-//					////persist.setOwner(DataantUser.ADMIN.getUid());
-//					persist.setDirectory(0);
-//					session.save(persist);
-//					if(persist.getId()==null){
-//						return null;
-//					}
-//					return String.valueOf(persist.getId());
-//				}
-//				return String.valueOf(list.get(0).getId());
-//			}
-//		});
+
 	}
 
 	@Override

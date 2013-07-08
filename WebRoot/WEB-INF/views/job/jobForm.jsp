@@ -37,7 +37,7 @@
 				<input id="submit_btn" class="btn btn-primary" type="submit" value="保存"/>&nbsp;
 				<a class="btn btn-success" href="${ctx}/job/run/${job.id}/1"><i class="icon-play icon-white"></i>手动运行</a>&nbsp;	
 				<a class="btn btn-success" href="${ctx}/job/run/${job.id}/2"><i class="icon-repeat icon-white"></i>手动恢复</a>&nbsp;	
-				<a class="btn btn-danger" href="${ctx}/job/swtich/${job.id}/${job.auto eq '0'?true:false}"><i class="icon-adjust icon-white"></i>开启/关闭</a>&nbsp;
+				<a class="btn btn-danger"  href="${ctx}/job/switch/${job.id}/${job.auto eq '0'?true:false}"><i class="icon-adjust icon-white"></i>开启/关闭</a>&nbsp;
 				<a class="btn btn-success" href="${ctx}/jobhistory?search_EQ_jobId=${job.id}"><i class="icon-info-sign icon-white"></i>运行日志</a>&nbsp;		
 			</div>
 			<div class="control-group">

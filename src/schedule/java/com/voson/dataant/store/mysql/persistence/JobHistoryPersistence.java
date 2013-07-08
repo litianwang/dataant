@@ -5,7 +5,9 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -13,6 +15,8 @@ import javax.persistence.Table;
 public class JobHistoryPersistence {
 	@Id
 	@GeneratedValue
+	//@GeneratedValue(strategy =GenerationType.SEQUENCE, generator = "dataant_job_history_seq")
+	//@SequenceGenerator(name="dataant_job_history_seq", sequenceName="dataant_job_history_seq",allocationSize=1,initialValue=1)
 	private Long id;
 	@Column(name="job_id")
 	private Long jobId;

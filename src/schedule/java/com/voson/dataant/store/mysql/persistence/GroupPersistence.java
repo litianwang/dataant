@@ -6,7 +6,9 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -15,6 +17,8 @@ public class GroupPersistence implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
+	//@GeneratedValue(strategy =GenerationType.SEQUENCE, generator = "dataant_group_seq")
+	//@SequenceGenerator(name="dataant_group_seq", sequenceName="dataant_group_seq",allocationSize=1,initialValue=1)
 	private Integer id;
 	@Column
 	private Integer parent;

@@ -119,24 +119,6 @@ public class ClientWorker {
 					log.error("log exception error!");
 				}
 			}
-
-//			private void exDebugLog(Job job, Exception e) {
-//				try {
-//					DebugHistory his = job.getJobContext().getDebugHistory();
-//					String jlog = his.getLog().getContent();
-//					if (jlog == null) {
-//						jlog = "";
-//					}
-//					log.error(new StringBuilder("log output error!\n")
-//									.append("[fileId:").append(his.getFileId())
-//									.append(", hisId:").append(his.getId())
-//									.append(", logLength:")
-//									.append(jlog.length()).append("]")
-//									.toString(), e);
-//				} catch (Exception ex) {
-//					log.error("log exception error!");
-//				}
-//			}
 			
 			public void run() {
 
@@ -159,17 +141,6 @@ public class ClientWorker {
 						exLog(job, e);
 					}
 				}
-//				for (Job job : new HashSet<Job>(context.getDebugRunnings()
-//						.values())) {
-//					try {
-//						DebugHistory his = job.getJobContext()
-//								.getDebugHistory();
-//						context.getDebugHistoryManager().updateDebugHistoryLog(
-//								his.getId(), his.getLog().getContent());
-//					} catch (Exception e) {
-//						exDebugLog(job, e);
-//					}
-//				}
 
 			}
 		}, 0, 3, TimeUnit.SECONDS);

@@ -19,6 +19,7 @@ public class FirstAnalyzeRuleHistory implements java.io.Serializable {
 	 */
 	@Id
 	@Column(name = "ID")
+	@GeneratedValue
 	//TODO:oracle环境需要去掉下面注释
 	//@GeneratedValue(strategy =GenerationType.SEQUENCE, generator = "FIRST_ANALYZE_RULE_HIS_ID_SEQ")
 	//@SequenceGenerator(name="FIRST_ANALYZE_RULE_HIS_ID_SEQ", sequenceName="FIRST_ANALYZE_RULE_HIS_ID_SEQ",allocationSize=1,initialValue=1)

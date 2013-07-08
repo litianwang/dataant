@@ -6,6 +6,7 @@
 <html>
 <head>
 	<title>APP详单查询管理</title>
+	<%@include file="/common/meta.jsp"%>
 	<script>
 		$(document).ready(function() {
 			$("#searchapp-tab").addClass("active");

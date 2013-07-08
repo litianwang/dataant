@@ -144,5 +144,29 @@ public class JobService {
 		}
 	
 	}
+	
+	/**
+	 * 取消作业
+	 * @param historyId
+	 * @throws Exception
+	 */
+	public void cancel(String historyId) throws Exception{
+		JobHistory history=jobHistoryManager.findJobHistory(historyId);
+		if(false){
+			throw new Exception("你没有权限执行该操作");
+		}
+		ExecuteKind kind=null;
+		if(history.getTriggerType()==TriggerType.MANUAL){
+			kind=ExecuteKind.ManualKind;
+		}else{
+			kind=ExecuteKind.ScheduleKind;
+		}
+		try {
+			worker.cancelJobFromWeb(kind, historyId,"litianwang");
+		} catch (Exception e) {
+			log.error("error",e);
+			throw new Exception(e.getMessage());
+		}
+	}
 
 }

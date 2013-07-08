@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +23,7 @@ import org.springside.modules.web.Servlets;
 import com.google.common.collect.Maps;
 import com.voson.dataant.common.web.DateConvertEditor;
 import com.voson.dataant.secedule.service.JobHistoryService;
+import com.voson.dataant.secedule.service.JobService;
 import com.voson.dataant.store.mysql.persistence.JobHistoryPersistence;
 
 /**
@@ -52,6 +52,9 @@ public class JobHistoryController {
 
 	@Autowired
 	private JobHistoryService jobHistoryService;
+
+	@Autowired
+	private JobService jobService;
 	
 	@InitBinder
 	protected void initBinder(HttpServletRequest request,
@@ -76,33 +79,22 @@ public class JobHistoryController {
 		return "jobhistory/jobhistoryList";
 	}
 
-	@RequestMapping(value = "create", method = RequestMethod.GET)
-	public String createForm(Model model) {
-		model.addAttribute("dataantJobHistory", new JobHistoryPersistence());
-		model.addAttribute("action", "create");
-		return "jobhistory/jobhistoryForm";
-	}
-
-	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(@Valid JobHistoryPersistence newDataantJobHistory, RedirectAttributes redirectAttributes) {
-		// newDataantJobHistory.setInsertTime(new Date());
-		jobHistoryService.saveDataantJobHistory(newDataantJobHistory);
-		redirectAttributes.addFlashAttribute("message", "创建任务成功");
-		return "redirect:/jobhistory/";
-	}
-
 	@RequestMapping(value = "update/{id}", method = RequestMethod.GET)
 	public String updateForm(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("dataantJobHistory", jobHistoryService.getDataantJobHistory(id));
 		model.addAttribute("action", "update");
 		return "jobhistory/jobhistoryForm";
 	}
-
-	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String update(@Valid @ModelAttribute("preloadDataantJobHistory") JobHistoryPersistence dataantJobHistory, RedirectAttributes redirectAttributes) {
-		jobHistoryService.saveDataantJobHistory(dataantJobHistory);
-		redirectAttributes.addFlashAttribute("message", "更新任务成功");
-		return "redirect:/jobhistory/";
+	
+	@RequestMapping(value = "log/{jobId}/{historyId}", method = RequestMethod.GET)
+	public String viewLog(@PathVariable("jobId") String jobId,
+			@PathVariable("historyId") String historyId, 
+			Model model){
+		JobHistoryPersistence history = jobHistoryService.getDataantJobHistory(Long.valueOf(historyId));
+		if(null != history){
+			model.addAttribute("jobHistory", history);
+		}
+		return "jobhistory/jobhistoryLog";
 	}
 
 	@RequestMapping(value = "delete/{id}")
@@ -110,6 +102,19 @@ public class JobHistoryController {
 		jobHistoryService.deleteDataantJobHistory(id);
 		redirectAttributes.addFlashAttribute("message", "删除任务成功");
 		return "redirect:/jobhistory/";
+	}
+	
+	@RequestMapping(value = "cancel/{jobId}/{historyId}/", method = RequestMethod.GET)
+	public String cancel(@PathVariable("jobId") String jobId,
+			@PathVariable("historyId") String historyId, 
+			RedirectAttributes redirectAttributes) throws Exception {
+		try {
+			jobService.cancel(historyId);
+			redirectAttributes.addFlashAttribute("message", "取消任务");
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("message", e.getMessage());
+		}
+		return "redirect:/jobhistory?search_EQ_jobId=" + jobId;
 	}
 
 	/**

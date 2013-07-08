@@ -14,10 +14,10 @@
 	
 	<bean id="environment" class="com.voson.dataant.util.Environment" >
 		<constructor-arg index="0">
-			<value>test</value>
+			<value>test-dev</value>
 		</constructor-arg>
 		<constructor-arg index="1">
-			<value>test</value>
+			<value>test-dev</value>
 		</constructor-arg>
 		<constructor-arg index="2">
 			<value>/dataant/</value>

@@ -5,6 +5,7 @@
 <html>
 <head>
 	<title>任务管理</title>
+	<%@include file="/common/meta.jsp"%>
 	
 	<script>
 		$(document).ready(function() {

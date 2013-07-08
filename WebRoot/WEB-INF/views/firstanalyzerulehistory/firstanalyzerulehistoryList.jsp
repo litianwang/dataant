@@ -6,6 +6,7 @@
 <html>
 <head>
 	<title>**管理</title>
+	<%@include file="/common/meta.jsp"%>
 </head>
 
 <body>

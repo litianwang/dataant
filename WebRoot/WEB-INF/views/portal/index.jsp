@@ -140,9 +140,9 @@
                     </div>
                     <div title="实时营销">
                     <div style=" height:7px;"></div>
-                         <a class="l-link" href="javascript:f_addTab('listpage','规则管理','${ctx}/firstanalyze/')">规则管理</a>
-                         <a class="l-link" href="javascript:f_addTab('listpage','URL详单查询','${ctx}/searchurl')">URL详单查询</a>
-                         <a class="l-link" href="javascript:f_addTab('listpage','APP详单查询','${ctx}/searchapp')">APP详单查询</a> 
+                         <a class="l-link" href="javascript:f_addTab('firstanalyzepage','规则管理','${ctx}/firstanalyze/')">规则管理</a>
+                         <a class="l-link" href="javascript:f_addTab('searchurlpage','URL详单查询','${ctx}/searchurl')">URL详单查询</a>
+                         <a class="l-link" href="javascript:f_addTab('searchapppage','APP详单查询','${ctx}/searchapp')">APP详单查询</a> 
                     </div>    
         </div>
         <div position="center" id="framecenter"> 

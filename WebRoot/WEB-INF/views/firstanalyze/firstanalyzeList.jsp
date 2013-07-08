@@ -6,6 +6,7 @@
 <html>
 <head>
 	<title>规则管理</title>
+	<%@include file="/common/meta.jsp"%>
 	<script>
 		$(document).ready(function() {
 			$("#firstanalyze-tab").addClass("active");

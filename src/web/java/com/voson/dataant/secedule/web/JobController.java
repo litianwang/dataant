@@ -153,14 +153,23 @@ public class JobController {
 	
 	@RequestMapping(value = "run/{id}/{type}", method = RequestMethod.GET)
 	public String run(@PathVariable("id") String id, @PathVariable("type")int type, RedirectAttributes redirectAttributes) throws Exception {
-		jobService.runJob(id, type);
-		redirectAttributes.addFlashAttribute("message", "手动运行作业开始");
+		try {
+			jobService.runJob(id, type);
+			redirectAttributes.addFlashAttribute("message", "手动运行作业开始");
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("message", e.getMessage());
+		}
 		return "redirect:/job/update/"+id;
 	}
 	@RequestMapping(value = "switch/{id}/{auto}", method = RequestMethod.GET)
 	public String switchAuto(@PathVariable("id") String id, @PathVariable("auto")Boolean auto, RedirectAttributes redirectAttributes) throws Exception {
-		jobService.swtichAuto(id, auto);
-		redirectAttributes.addFlashAttribute("message", "开启/关闭  自动调度  成功");
+		try {
+			
+			jobService.swtichAuto(id, auto);
+			redirectAttributes.addFlashAttribute("message", "开启/关闭  自动调度  成功");
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("message", e.getMessage());
+		}
 		return "redirect:/job/update/"+id;
 	}
 	

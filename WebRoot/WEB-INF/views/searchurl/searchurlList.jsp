@@ -6,6 +6,7 @@
 <html>
 <head>
 	<title>URL详单查询管理</title>
+	<%@include file="/common/meta.jsp"%>
 	<script>
 		$(document).ready(function() {
 			$("#searchurl-tab").addClass("active");
